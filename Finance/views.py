@@ -39,3 +39,6 @@ class Pdf(View):
         return Render.render('pdf.html', params)
 
 #class AdminSignUpView()
+
+def visualize(request):
+    return render(request,'siddhesh.html')
