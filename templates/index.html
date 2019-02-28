@@ -5,6 +5,7 @@
 {% load staticfiles %}
 
 <head>
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- Tell the browser to be responsive to screen width -->
@@ -29,6 +30,30 @@
 </head>
 
 <body class="fix-header fix-sidebar card-no-border">
+    <script src="https://code.highcharts.com/highcharts.src.js"></script>
+                <script>
+    Highcharts.chart('container', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'Historic World Population by Region'
+        },
+        xAxis: {
+            categories: ['Africa', 'America', 'Asia', 'Europe', 'Oceania']
+        },
+        series: [{
+            name: 'Year 1800',
+            data: [107, 31, 635, 203, 2]
+        }, {
+            name: 'Year 1900',
+            data: [133, 156, 947, 408, 6]
+        }, {
+            name: 'Year 2012',
+            data: [1052, 954, 4250, 740, 38]
+        }]
+    });
+  </script>
     <!-- ============================================================== -->
     <!-- Preloader - style you can find in spinners.css -->
     <!-- ============================================================== -->
@@ -215,6 +240,7 @@
                     <!-- Column -->
                 </div>
                 <!-- Row -->
+
                 <!-- Row -->
                 <div class="row">
                     <!-- column -->
@@ -222,9 +248,9 @@
                         <div class="card">
                             <div class="card-block">
                                 <h4 class="card-title">Revenue Statistics</h4>
-                                <div class="flot-chart">
-                                    <div class="flot-chart-content" id="flot-line-chart"></div>
-                                </div>
+                                <div id="container"></div>
+  <script src="https://code.highcharts.com/highcharts.src.js"></script>
+
                             </div>
                         </div>
                     </div>
@@ -236,68 +262,70 @@
                     <div class="col-sm-12">
                         <div class="card">
                             <div class="card-block">
-                                <select class="custom-select pull-right">
-                                    <option selected>January</option>
-                                    <option value="1">February</option>
-                                    <option value="2">March</option>
-                                    <option value="3">April</option>
-                                </select>
-                                <h4 class="card-title">Projects of the Month</h4>
-                                <div class="table-responsive m-t-40">
-                                    <table class="table stylish-table">
-                                        <thead>
-                                            <tr>
-                                                <th colspan="2">Assigned</th>
-                                                <th>Name</th>
-                                                <th>Budget</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td style="width:50px;"><span class="round">S</span></td>
-                                                <td>
-                                                    <h6>Sunil Joshi</h6><small class="text-muted">Web Designer</small></td>
-                                                <td>Elite Admin</td>
-                                                <td>$3.9K</td>
-                                            </tr>
-                                            <tr class="active">
-                                                <td><span class="round"><img src="{% static 'assets/images/users/2.jpg' %}" alt="user" width="50" /></span></td>
-                                                <td>
-                                                    <h6>Andrew</h6><small class="text-muted">Project Manager</small></td>
-                                                <td>Real Homes</td>
-                                                <td>$23.9K</td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="round round-success">B</span></td>
-                                                <td>
-                                                    <h6>Bhavesh patel</h6><small class="text-muted">Developer</small></td>
-                                                <td>MedicalPro Theme</td>
-                                                <td>$12.9K</td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="round round-primary">N</span></td>
-                                                <td>
-                                                    <h6>Nirav Joshi</h6><small class="text-muted">Frontend Eng</small></td>
-                                                <td>Elite Admin</td>
-                                                <td>$10.9K</td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="round round-warning">M</span></td>
-                                                <td>
-                                                    <h6>Micheal Doe</h6><small class="text-muted">Content Writer</small></td>
-                                                <td>Helping Hands</td>
-                                                <td>$12.9K</td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="round round-danger">N</span></td>
-                                                <td>
-                                                    <h6>Johnathan</h6><small class="text-muted">Graphic</small></td>
-                                                <td>Digital Agency</td>
-                                                <td>$2.6K</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                <script>
+                                Highcharts.chart('container', {
+    chart: {
+        plotBackgroundColor: null,
+        plotBorderWidth: null,
+        plotShadow: false,
+        type: 'pie'
+    },
+    title: {
+        text: 'Furniture in January, 2018'
+    },
+    tooltip: {
+        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    },
+    plotOptions: {
+        pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                style: {
+                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                }
+            }
+        }
+    },
+    series: [{
+        name: 'Brands',
+        colorByPoint: true,
+        data: [{
+            name: 'General Chairs',
+            y: 61.41,
+            sliced: true,
+            selected: true
+        }, {
+            name: 'Dining Chairs',
+            y: 11.84
+        }, {
+            name: 'Office Chairs',
+            y: 10.85
+        }, {
+            name: 'Dining Tables',
+            y: 4.67
+        }, {
+            name: 'Wardrobes',
+            y: 4.18
+        }, {
+            name: 'Cupboards',
+            y: 1.64
+        }, {
+            name: 'Dressing Tables',
+            y: 1.6
+        }, {
+            name: 'Side Tables',
+            y: 1.2
+        }, {
+            name: 'Other',
+            y: 2.61
+        }]
+    }]
+});
+     </script>
+
                             </div>
                         </div>
                     </div>
