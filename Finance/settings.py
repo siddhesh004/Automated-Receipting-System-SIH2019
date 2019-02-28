@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from django.conf import settings
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -134,3 +136,10 @@ USE_TZ = True
 STATIC_URL = '/templates/'
 STATIC_ROOT = '/templates/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'templates'), )
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'sudo.coders2019@gmail.com'
+EMAIL_HOST_PASSWORD = 'Sudocoders2019'
