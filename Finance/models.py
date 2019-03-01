@@ -5,6 +5,7 @@ from django.db import models
 class User(AbstractUser):
     username = models.CharField(max_length=50, unique= True, default='')
 
+
 class Customer(models.Model):
     customer_id=models.CharField(max_length=10)
     customer_name=models.CharField(max_length=20)

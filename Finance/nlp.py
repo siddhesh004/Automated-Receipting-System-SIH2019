@@ -39,11 +39,11 @@ def nlp(text):
 
     # Function to detect date regex
     def isInvoiceDate(x):
-        dateregex1 = r'(\d\d-\w+-\d\d\d\d)'
-        dateregex2 = r'(\d\d-\d\d-\d\d\d\d)'
-        dateregex3 = r'(\d\d\/\d\d\/\d\d\d\d)'
-        dateregex4 = r'(\d\d\s+\w+\s+\d\d\d\d)'
-        dateregex5 = r'(\w+\s+\d\d,?\s+,?\d\d\d\d)'
+        dateregex1 = r'(\d\d?-\w+-\d?\d?\d\d)'
+        dateregex2 = r'(\d\d?-\d\d?-\d?\d?\d\d)'
+        dateregex3 = r'(\d\d?\/\d\d?\/\d?\d?\d\d)'
+        dateregex4 = r'(\d\d?\s+\w+\s+\d?\d?\d\d)'
+        dateregex5 = r'(\w+\s+\d?\d,?\s+\d?\d?\d\d)'
 
         if re.match(dateregex1, x):
             try:

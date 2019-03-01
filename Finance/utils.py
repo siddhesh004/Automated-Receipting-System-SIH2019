@@ -2,9 +2,10 @@ from django.conf import settings
 from django.core.mail import send_mail, EmailMessage
 from .models import ReceiptData, Customer
 
+
 def send_receipt_message():
     recipients = []
-    for user in Customer.objects.all():
+    for user in ReceiptData.objects.all():
         recipients.append(user.email)
     # send_mail(
     #     subject='Finance Receipt',

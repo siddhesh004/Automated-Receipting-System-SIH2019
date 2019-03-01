@@ -13,6 +13,7 @@ from Finance.utils import send_receipt_message
 def home(request):
     return render(request, 'index.html')
 
+
 def uploadView(request):
     form = UploadForm(request.POST or None, request.FILES or None)
     if form.is_valid():
