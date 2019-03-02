@@ -100,7 +100,7 @@ def uploadView(request):
             # filename = request.user.username + randint(1, 10000)
             # response['Content-Disposition'] = 'attachment; filename = ""'
             recipients = []
-            for user in Customer.objects.all():
+            for user in Customer.objects.filter(customer_id=receipt.customer_id.customer_id):
                 recipients.append(user.customer_email)
 
             email = EmailMessage(subject='Finance Receipt', body='PFA finance receipt', from_email=settings.EMAIL_HOST_USER,to=recipients)

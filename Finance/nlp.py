@@ -242,7 +242,7 @@ def nlp(text,comp):
     try:
         c1=Customer.objects.get(customer_id=usefuldata["Customer ID"])
     except Customer.DoesNotExist:
-        c1 = None
+        c1 = Customer()
         c1.customer_id=usefuldata["Customer ID"]
         c1.customer_name="Soumya"
         c1.customer_gender="Female"
