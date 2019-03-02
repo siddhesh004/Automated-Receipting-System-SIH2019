@@ -15,6 +15,7 @@ from Finance.render import Render
 import pdfkit, datetime, os
 from zipfile import ZipFile
 from django.core.files.base import ContentFile
+from django.contrib import messages
 
 
 def home(request):
@@ -102,13 +103,13 @@ def uploadView(request):
             for user in Customer.objects.all():
                 recipients.append(user.customer_email)
 
-            email = EmailMessage(subject='Finance Receipt', body='PFA finance receipt', from_email=settings.EMAIL_HOST_USER,
-                                 to=recipients)
+            email = EmailMessage(subject='Finance Receipt', body='PFA finance receipt', from_email=settings.EMAIL_HOST_USER,to=recipients)
             email.attach_file(file_path)
             email.send()
             receipt.mailed_status = True
             receipt.save()
-        return render(request, 'index.html')
+        messages.success(request, 'Email(s) sent successfully!')
+        return redirect(home)
     form = UploadForm()
     return render(request, 'upload.html', {'form': form})
 

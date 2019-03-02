@@ -136,12 +136,21 @@ input[type=text],[type=password] {
   border-radius: 5px 5px 5px 5px;
 }
 
-input[type=text],[type=password]:focus {
+input[type=text]:focus {
   background-color: #fff;
   border-bottom: 2px solid #5fbae9;
 }
 
-input[type=text],[type=password]:placeholder {
+input[type=password]:focus {
+  background-color: #fff;
+  border-bottom: 2px solid #5fbae9;
+}
+
+input[type=text]::placeholder {
+  color: #cccccc;
+}
+
+input[type=password]::placeholder {
   color: #cccccc;
 }
 
