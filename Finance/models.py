@@ -35,7 +35,7 @@ class ReceiptData(models.Model):
     card_no = models.IntegerField(default=0000000000000000)
     cheque_no = models.IntegerField(default=0)
     bank_name = models.CharField(max_length=100, default='',blank=True)
-
+    mailed_status = models.BooleanField(default=False)
 
 class Items(models.Model):
     invoice_no=models.ForeignKey(ReceiptData, on_delete=models.CASCADE)

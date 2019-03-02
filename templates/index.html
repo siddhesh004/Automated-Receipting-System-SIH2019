@@ -4,13 +4,11 @@
 
 {% block actual_content %}
     {% if messages %}
-        <div class="row" id="message_container">
-            <div class="col-sm-6 col-sm-offset-3">
-            {% for message in messages %}
-                <p{% if message.tags == "success" %} class="alert alert-success"{% endif %}>{{ message }}</p>
-            {% endfor %}
-            </div>
-        </div>
+        {% for message in messages %}
+            {% if message.tags == "success" %}
+                <p id="snackbar">{{ message }}</p>
+            {% endif %}
+        {% endfor %}
     {% endif %}
     <div class="row">
         <!-- Column -->
@@ -139,8 +137,8 @@
     </div>
 
     <script>
-        var message_ele = document.getElementById("message_container");
-        setTimeout(function(){
-            message_ele.style.display = "none";}, 3000);
-    </script>
+        var x = document.getElementById("snackbar");
+        x.className = "show";
+        setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+        </script>
 {% endblock %}

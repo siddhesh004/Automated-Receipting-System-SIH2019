@@ -69,36 +69,44 @@ def uploadView(request):
         path_wkthmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
         config = pdfkit.configuration(wkhtmltopdf=path_wkthmltopdf)
         now = datetime.datetime.now()
-        receipt = ReceiptData.objects.last()
-        item = Items.objects.filter(invoice_no=receipt.invoice_no)
-        context = {
-            'receipt': receipt,
-            'item': item,
-            'today': now.strftime("%d-%m-%Y"),
-        }
-        print(receipt.invoice_no)
-        print(item)
-        print(receipt.amount)
-        print(type(item))
-        template = get_template('pdf.html')
-        # c = Context(context)
-        html = template.render(context)
-        options = {
-            'page-size': 'Letter',
-            'encoding': "UTF-8",
-        }
-        filename = receipt.invoice_no
-        file_path = os.path.join("pdf\%s.pdf" % filename)
-        pdfkit.from_string(html, file_path, options, configuration=config)
-        recipients = []
-        for user in Customer.objects.all():
-            recipients.append(user.customer_email)
+        receipt_list = ReceiptData.objects.filter(mailed_status=False)
+        for receipt in receipt_list:
+            item = Items.objects.filter(invoice_no=receipt.invoice_no)
+            context = {
+                # 'receipt_no': receipt.invoice_no,
+                # 'receipt_amount': receipt.amount,
+                # 'receipt_customer': receipt.,
+                'receipt': receipt,
+                'item': item,
+                'today': now.strftime("%d-%m-%Y"),
+            }
+            print(receipt.invoice_no)
+            print(item)
+            print(receipt.amount)
+            print(type(item))
+            template = get_template('pdf.html')
+            # c = Context(context)
+            html = template.render(context)
+            options = {
+                'page-size': 'Letter',
+                'encoding': "UTF-8",
+            }
+            filename = receipt.invoice_no
+            file_path = os.path.join("pdf\%s.pdf" % filename)
+            pdf = pdfkit.from_string(html, file_path, options, configuration=config)
+            # response = HttpResponse(pdf, content_type='application/pdf')
+            # filename = request.user.username + randint(1, 10000)
+            # response['Content-Disposition'] = 'attachment; filename = ""'
+            recipients = []
+            for user in Customer.objects.all():
+                recipients.append(user.customer_email)
 
-        email = EmailMessage(subject='Finance Receipt', body='PFA finance receipt', from_email=settings.EMAIL_HOST_USER,
-                             to=recipients)
-        email.attach_file(file_path)
-        email.send()
-        messages.success(request, 'Email sent successfully!')
+            email = EmailMessage(subject='Finance Receipt', body='PFA finance receipt', from_email=settings.EMAIL_HOST_USER,to=recipients)
+            email.attach_file(file_path)
+            email.send()
+            receipt.mailed_status = True
+            receipt.save()
+        messages.success(request, 'Email(s) sent successfully!')
         return redirect(home)
     form = UploadForm()
     return render(request, 'upload.html', {'form': form})
