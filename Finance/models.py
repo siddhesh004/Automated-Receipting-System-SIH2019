@@ -44,7 +44,11 @@ class ReceiptData(models.Model):
     card_no = models.IntegerField(default=0000000000000000)
     cheque_no = models.IntegerField(default=0)
     bank_name = models.CharField(max_length=100, default='',blank=True)
+
     company_name = models.CharField(max_length=50, blank=True, default='')
+
+
+    mailed_status = models.BooleanField(default=False)
 
 
 class Items(models.Model):
@@ -60,5 +64,7 @@ class Uploads(models.Model):
     description = models.CharField(max_length=255, blank=True)
     #document = models.FileField(upload_to='documents/')
     document = models.FileField(null=True, blank=True)
+
     uploaded_at = models.DateTimeField(auto_now_add=True)
     company_name = models.CharField(max_length=50, blank=True, default='')
+
