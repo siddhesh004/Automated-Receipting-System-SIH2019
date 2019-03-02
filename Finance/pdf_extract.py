@@ -36,9 +36,10 @@ def extract(request):
 
 def extract_image(request):
 
+
     file = request.FILES['document']
     logger = request.user
-    comp = logger.company
+    comp = logger.company_name.company_name
     name = str(file)
     finalpath = "templates\\Media\\" + name
     image = cv2.imread(finalpath)
@@ -60,7 +61,7 @@ def extract_image(request):
 
 def extract_zip(name,request):
     logger = request.user
-    comp = logger.company_name
+    comp = logger.company_name.company_name
     print(name)
     finalpath = "templates\\Media\\" + name
     print(finalpath)
@@ -72,7 +73,7 @@ def extract_zip(name,request):
 def extract_image_zip(name,request):
 
     logger = request.user
-    comp = logger.company_name
+    comp = logger.company_name.company_name
     finalpath = "templates\\Media\\" + name
     image = cv2.imread(finalpath)
     #image = cv2.resize(image, None, fx=1, fy=1, interpolation=cv2.INTER_CUBIC)

@@ -249,8 +249,8 @@ def nlp(text,comp):
     c1.customer_phone=123456
     c1.company_name = comp
 
-
     c1.save()
+
     r1=ReceiptData()
     r1.customer_id=c1
     r1.invoice_no=usefuldata["Invoice Number"]
