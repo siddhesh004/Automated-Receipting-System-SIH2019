@@ -7,7 +7,7 @@ from nltk.corpus import stopwords
 from tika import parser
 import re
 from .models import ReceiptData, Customer, Items
-def nlp(text):
+def nlp(text,comp):
 
 
 
@@ -239,7 +239,7 @@ def nlp(text):
     for m in usefuldata:
         print(str(m) + " " + str(usefuldata[m]))
 
-    print("XOXO",usefuldata["Total Bill"])
+
     c1=Customer()
     c1.customer_id=usefuldata["Customer ID"]
     c1.customer_name="Soumya"
@@ -247,13 +247,17 @@ def nlp(text):
     c1.customer_email="soumya.koppaka@spit.ac.in"
     c1.customer_address="Andheri"
     c1.customer_phone=123456
+    c1.company_name = comp
+
     c1.save()
+
     r1=ReceiptData()
     r1.customer_id=c1
     r1.invoice_no=usefuldata["Invoice Number"]
     r1.amount = usefuldata["Total Bill"]
     r1.date = usefuldata["Date"]
     r1.mode = usefuldata["Payment method"]
+    r1.company_name= comp
     r1.save()
     #i1=Items()
 
@@ -266,4 +270,5 @@ def nlp(text):
         objs[i].quant=usefuldata["Items"][i][1]
         objs[i].unit_price=usefuldata["Items"][i][2]
         objs[i].total=usefuldata["Items"][i][3]
+        objs[i].company_name=comp
         objs[i].save()

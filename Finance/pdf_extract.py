@@ -14,6 +14,10 @@ pytesseract.pytesseract.tesseract_cmd = r"C:\\Program Files (x86)\\Tesseract-OCR
 
 
 def extract(request):
+
+    logger = request.user
+    comp = logger.company_name.company_name
+
     file = request.FILES['document'].name
 
     name = str(file)
@@ -28,12 +32,14 @@ def extract(request):
     raw = parser.from_file(finalpath)
     print(raw['content'])
 
-    nlp(raw['content'])
+    nlp(raw['content'],comp)
 
 def extract_image(request):
 
-    file = request.FILES['document']
 
+    file = request.FILES['document']
+    logger = request.user
+    comp = logger.company_name.company_name
     name = str(file)
     finalpath = "templates\\Media\\" + name
     image = cv2.imread(finalpath)
@@ -50,18 +56,24 @@ def extract_image(request):
     text = pytesseract.image_to_string(Image.open(filename), lang="eng")
     os.remove(filename)
     print(text)
-    nlp(text)
+    nlp(text,comp)
 
 
-def extract_zip(name):
+def extract_zip(name,request):
+    logger = request.user
+    comp = logger.company_name.company_name
     print(name)
     finalpath = "templates\\Media\\" + name
     print(finalpath)
     raw = parser.from_file(finalpath)
     print(raw['content'])
-    nlp(raw['content'])
+    nlp(raw['content'],comp)
 
-def extract_image_zip(name):
+
+def extract_image_zip(name,request):
+
+    logger = request.user
+    comp = logger.company_name.company_name
     finalpath = "templates\\Media\\" + name
     image = cv2.imread(finalpath)
     #image = cv2.resize(image, None, fx=1, fy=1, interpolation=cv2.INTER_CUBIC)
@@ -76,5 +88,5 @@ def extract_image_zip(name):
         os.remove(filename)
 
         print(text)
-        nlp(text)
+        nlp(text,comp)
 

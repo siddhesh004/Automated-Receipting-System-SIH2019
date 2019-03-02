@@ -2,8 +2,16 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import URLValidator
 from django.db import models
 
+
+class Company(models.Model):
+
+    company_name = models.CharField(max_length=50, primary_key=True)
+    logo = models.ImageField(upload_to = 'templates/assets/images/company', default = 'templates/assets/images/company/logo-text.png')
+
+
 class User(AbstractUser):
     username = models.CharField(max_length=50, unique= True, default='')
+    company_name = models.ForeignKey(Company, on_delete=models.CASCADE, default='', blank=True)
 
 
 class Customer(models.Model):
@@ -18,6 +26,7 @@ class Customer(models.Model):
         ('others', 'Others')
     )
     customer_gender = models.CharField(max_length=6, choices=Gender, default='Male')
+    company_name = models.CharField(max_length=50, blank=True, default='')
 
 
 class ReceiptData(models.Model):
@@ -35,7 +44,12 @@ class ReceiptData(models.Model):
     card_no = models.IntegerField(default=0000000000000000)
     cheque_no = models.IntegerField(default=0)
     bank_name = models.CharField(max_length=100, default='',blank=True)
+
+    company_name = models.CharField(max_length=50, blank=True, default='')
+
+
     mailed_status = models.BooleanField(default=False)
+
 
 class Items(models.Model):
     invoice_no=models.ForeignKey(ReceiptData, on_delete=models.CASCADE)
@@ -43,9 +57,14 @@ class Items(models.Model):
     quant = models.CharField(max_length=10)
     unit_price=models.CharField(max_length=10)
     total = models.CharField(max_length=10)
+    company_name = models.CharField(max_length=50, blank=True, default='')
+
 
 class Uploads(models.Model):
     description = models.CharField(max_length=255, blank=True)
     #document = models.FileField(upload_to='documents/')
     document = models.FileField(null=True, blank=True)
+
     uploaded_at = models.DateTimeField(auto_now_add=True)
+    company_name = models.CharField(max_length=50, blank=True, default='')
+
