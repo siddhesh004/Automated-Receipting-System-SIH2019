@@ -15,6 +15,7 @@ from Finance.render import Render
 import pdfkit, datetime, os
 from zipfile import ZipFile
 from django.core.files.base import ContentFile
+from django.contrib import messages
 
 
 def home(request):
@@ -71,9 +72,6 @@ def uploadView(request):
         receipt = ReceiptData.objects.last()
         item = Items.objects.filter(invoice_no=receipt.invoice_no)
         context = {
-            # 'receipt_no': receipt.invoice_no,
-            # 'receipt_amount': receipt.amount,
-            # 'receipt_customer': receipt.,
             'receipt': receipt,
             'item': item,
             'today': now.strftime("%d-%m-%Y"),
@@ -91,10 +89,7 @@ def uploadView(request):
         }
         filename = receipt.invoice_no
         file_path = os.path.join("pdf\%s.pdf" % filename)
-        pdf = pdfkit.from_string(html, file_path, options, configuration=config)
-        # response = HttpResponse(pdf, content_type='application/pdf')
-        # filename = request.user.username + randint(1, 10000)
-        # response['Content-Disposition'] = 'attachment; filename = ""'
+        pdfkit.from_string(html, file_path, options, configuration=config)
         recipients = []
         for user in Customer.objects.all():
             recipients.append(user.customer_email)
@@ -103,7 +98,8 @@ def uploadView(request):
                              to=recipients)
         email.attach_file(file_path)
         email.send()
-        return render(request, 'index.html')
+        messages.success(request, 'Email sent successfully!')
+        return redirect(home)
     form = UploadForm()
     return render(request, 'upload.html', {'form': form})
 

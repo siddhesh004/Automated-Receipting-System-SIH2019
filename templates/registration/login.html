@@ -3,38 +3,6 @@
 {% load staticfiles %}
 
 {% block actual_content %}
-    <!---<div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-block">
-                    <div class="box" style="height: 500px;">
-                        <h1 class="text-center">Log in<br></h1>
-                            <form class="form-signin text-center" method="post" novalidate>
-{#                                {% csrf_token %}#}
-{#                                    {% for field in form %}#}
-{#                                        {% for error in field.errors %}#}
-{#                                            <p class="text-danger">{{ error }}</p>#}
-{#                                            <br>#}
-{#                                        {% endfor %}#}
-{#                                        {{ field.label_tag }}<br>#}
-{#                                        {{ field }}#}
-{#                                        <br>#}
-{#                                    {% endfor %}#}
-                              <br>
-                                <button type="submit" class="btn btn-success">Log In</button>
-                            </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>--->
-<!--
-	Exercise from Briefbox.me
-	Brief: Design a simple, fresh sign-up form
-
-	Disclaimer:
-	Background taken from https://sumry.me/login | Credits to them. I just didn't wanted to bother to create something like this
--->
 <div class="wrapper fadeInDown">
   <div id="formContent">
     <!-- Tabs Titles -->
@@ -42,7 +10,7 @@
     <!-- Login Form -->
     <form method="POST" action = ''>
         {% csrf_token %}
-        <input type="hidden" autofocus>
+        <input type="hidden"  autofocus>
         <input type="text" id="username" class="fadeIn second" name="username" placeholder="Username">
         <input type="password" id="password" class="fadeIn third" name="password" placeholder="Password">
         <input type="submit" class="fadeIn fourth" value="Log In">

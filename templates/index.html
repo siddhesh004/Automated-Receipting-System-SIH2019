@@ -3,129 +3,144 @@
 {% load staticfiles %}
 
 {% block actual_content %}
-        <div class="row">
-            <!-- Column -->
-            <div class="col-sm-6">
-                <div class="card">
-                    <div class="card-block">
-                        <h4 class="card-title">Daily Sales</h4>
-                        <div class="text-right">
-                            <h2 class="font-light m-b-0"><i class="ti-arrow-up text-success"></i> $120</h2>
-                            <span class="text-muted">Todays Income</span>
-                        </div>
-                        <span class="text-success">80%</span>
-                        <div class="progress">
-                            <div class="progress-bar bg-success" role="progressbar" style="width: 80%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                    </div>
-                </div>
+    {% if messages %}
+        <div class="row" id="message_container">
+            <div class="col-sm-6 col-sm-offset-3">
+            {% for message in messages %}
+                <p{% if message.tags == "success" %} class="alert alert-success"{% endif %}>{{ message }}</p>
+            {% endfor %}
             </div>
-            <!-- Column -->
-            <!-- Column -->
-            <div class="col-sm-6">
-                <div class="card">
-                    <div class="card-block">
-                        <h4 class="card-title">Weekly Sales</h4>
-                        <div class="text-right">
-                            <h2 class="font-light m-b-0"><i class="ti-arrow-up text-info"></i> $5,000</h2>
-                            <span class="text-muted">Todays Income</span>
-                        </div>
-                        <span class="text-info">30%</span>
-                        <div class="progress">
-                            <div class="progress-bar bg-info" role="progressbar" style="width: 30%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Column -->
         </div>
-        <!-- Row -->
+    {% endif %}
+    <div class="row">
+        <!-- Column -->
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-block">
+                    <h4 class="card-title">Daily Sales</h4>
+                    <div class="text-right">
+                        <h2 class="font-light m-b-0"><i class="ti-arrow-up text-success"></i> $120</h2>
+                        <span class="text-muted">Todays Income</span>
+                    </div>
+                    <span class="text-success">80%</span>
+                    <div class="progress">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 80%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Column -->
+        <!-- Column -->
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-block">
+                    <h4 class="card-title">Weekly Sales</h4>
+                    <div class="text-right">
+                        <h2 class="font-light m-b-0"><i class="ti-arrow-up text-info"></i> $5,000</h2>
+                        <span class="text-muted">Todays Income</span>
+                    </div>
+                    <span class="text-info">30%</span>
+                    <div class="progress">
+                        <div class="progress-bar bg-info" role="progressbar" style="width: 30%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Column -->
+    </div>
+    <!-- Row -->
 
-        <!-- Row -->
-        <div class="row">
-            <!-- column -->
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-block">
-                        <h4 class="card-title">Revenue Statistics</h4>
-                        <div id="container"></div>
-                        <script src="https://code.highcharts.com/highcharts.src.js"></script>
-                    </div>
+    <!-- Row -->
+    <div class="row">
+        <!-- column -->
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-block">
+                    <h4 class="card-title">Revenue Statistics</h4>
+                    <div id="container"></div>
+                    <script src="https://code.highcharts.com/highcharts.src.js"></script>
                 </div>
             </div>
-            <!-- column -->
         </div>
-        <!-- Row -->
-        <!-- Row -->
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card">
-                    <div class="card-block">
-                        <script>
-                        Highcharts.chart('container', {
-                        chart: {
-                            plotBackgroundColor: null,
-                            plotBorderWidth: null,
-                            plotShadow: false,
-                            type: 'pie'
-                        },
-                        title: {
-                            text: 'Furniture in January, 2018'
-                        },
-                        tooltip: {
-                            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-                        },
-                        plotOptions: {
-                            pie: {
-                                allowPointSelect: true,
-                                cursor: 'pointer',
-                                dataLabels: {
-                                    enabled: true,
-                                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                                    style: {
-                                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-                                    }
+        <!-- column -->
+    </div>
+    <!-- Row -->
+    <!-- Row -->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-block">
+                    <script>
+                    Highcharts.chart('container', {
+                    chart: {
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false,
+                        type: 'pie'
+                    },
+                    title: {
+                        text: 'Furniture in January, 2018'
+                    },
+                    tooltip: {
+                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: true,
+                                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                                style: {
+                                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
                                 }
                             }
-                        },
-                        series: [{
-                            name: 'Brands',
-                            colorByPoint: true,
-                            data: [{
-                                name: 'General Chairs',
-                                y: 61.41,
-                                sliced: true,
-                                selected: true
-                            }, {
-                                name: 'Dining Chairs',
-                                y: 11.84
-                            }, {
-                                name: 'Office Chairs',
-                                y: 10.85
-                            }, {
-                                name: 'Dining Tables',
-                                y: 4.67
-                            }, {
-                                name: 'Wardrobes',
-                                y: 4.18
-                            }, {
-                                name: 'Cupboards',
-                                y: 1.64
-                            }, {
-                                name: 'Dressing Tables',
-                                y: 1.6
-                            }, {
-                                name: 'Side Tables',
-                                y: 1.2
-                            }, {
-                                name: 'Other',
-                                y: 2.61
-                            }]
+                        }
+                    },
+                    series: [{
+                        name: 'Brands',
+                        colorByPoint: true,
+                        data: [{
+                            name: 'General Chairs',
+                            y: 61.41,
+                            sliced: true,
+                            selected: true
+                        }, {
+                            name: 'Dining Chairs',
+                            y: 11.84
+                        }, {
+                            name: 'Office Chairs',
+                            y: 10.85
+                        }, {
+                            name: 'Dining Tables',
+                            y: 4.67
+                        }, {
+                            name: 'Wardrobes',
+                            y: 4.18
+                        }, {
+                            name: 'Cupboards',
+                            y: 1.64
+                        }, {
+                            name: 'Dressing Tables',
+                            y: 1.6
+                        }, {
+                            name: 'Side Tables',
+                            y: 1.2
+                        }, {
+                            name: 'Other',
+                            y: 2.61
                         }]
-                    });
-                        </script>
-                    </div>
+                    }]
+                });
+                    </script>
                 </div>
             </div>
         </div>
+    </div>
+
+    <script>
+        var message_ele = document.getElementById("message_container");
+        setTimeout(function(){
+            message_ele.style.display = "none";}, 3000);
+    </script>
 {% endblock %}
