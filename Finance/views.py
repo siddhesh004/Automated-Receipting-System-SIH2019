@@ -21,7 +21,7 @@ def home(request):
         print(x.item_name)
     return render(request, 'index.html')
 
-
+@login_required()
 def uploadView(request):
     form = UploadForm(request.POST or None, request.FILES or None)
     if form.is_valid():

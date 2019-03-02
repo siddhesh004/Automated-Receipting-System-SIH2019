@@ -1,417 +1,131 @@
-
-<!DOCTYPE html>
-<html lang="en">
-
+{% extends 'base.html' %}
 {% load static %}
 {% load staticfiles %}
 
-<head>
-
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- Tell the browser to be responsive to screen width -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'assets/images/favicon.png' %}">
-    <title>Smart India Hackathon 2019 Sudo Coders</title>
-    <!-- Bootstrap Core CSS -->
-    <link href="{% static 'assets/plugins/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-    <!-- Custom CSS -->
-    <link href="{% static 'css/style.css' %}" rel="stylesheet">
-    <!-- You can change the theme colors from here -->
-    <link href="{% static 'css/colors/blue.css' %}" id="theme" rel="stylesheet">
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
-</head>
-
-<body class="fix-header fix-sidebar card-no-border">
-    <script src="https://code.highcharts.com/highcharts.src.js"></script>
-                <script>
-    Highcharts.chart('container', {
-        chart: {
-            type: 'column'
-        },
-        title: {
-            text: 'Historic World Population by Region'
-        },
-        xAxis: {
-            categories: ['Africa', 'America', 'Asia', 'Europe', 'Oceania']
-        },
-        series: [{
-            name: 'Year 1800',
-            data: [107, 31, 635, 203, 2]
-        }, {
-            name: 'Year 1900',
-            data: [133, 156, 947, 408, 6]
-        }, {
-            name: 'Year 2012',
-            data: [1052, 954, 4250, 740, 38]
-        }]
-    });
-  </script>
-    <!-- ============================================================== -->
-    <!-- Preloader - style you can find in spinners.css -->
-    <!-- ============================================================== -->
-    <div class="preloader">
-        <svg class="circular" viewBox="25 25 50 50">
-            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" /> </svg>
-    </div>
-    <!-- ============================================================== -->
-    <!-- Main wrapper - style you can find in pages.scss -->
-    <!-- ============================================================== -->
-    <div id="main-wrapper">
-        <!-- ============================================================== -->
-        <!-- Topbar header - style you can find in pages.scss -->
-        <!-- ============================================================== -->
-        <header class="topbar">
-            <nav class="navbar top-navbar navbar-toggleable-sm navbar-light">
-                <!-- ============================================================== -->
-                <!-- Logo -->
-                <!-- ============================================================== -->
-                <!--<div class="navbar-header">-->
-                <div style="width: 100px ;text-align: center">
-                    <a class="navbar-brand" href="">
-                        <!-- Logo icon -->
-                       
-                        <!--End Logo icon -->
-                        <!-- Logo text -->
-                        <span>
-                            <!-- dark Logo text -->
-                            <img src="{% static 'assets/images/logo-text.png' %}" alt="homepage" class="dark-logo" height="65" />
-                        </span>
-                    </a>
+{% block actual_content %}
+        <div class="row">
+            <!-- Column -->
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-block">
+                        <h4 class="card-title">Daily Sales</h4>
+                        <div class="text-right">
+                            <h2 class="font-light m-b-0"><i class="ti-arrow-up text-success"></i> $120</h2>
+                            <span class="text-muted">Todays Income</span>
+                        </div>
+                        <span class="text-success">80%</span>
+                        <div class="progress">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 80%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
                 </div>
-                <!-- ============================================================== -->
-                <!-- End Logo -->
-                <!-- ============================================================== -->
-                <div class="navbar-collapse">
-                    <!-- ============================================================== -->
-                    <!-- toggle and nav items -->
-                    <!-- ============================================================== -->
-                    <ul class="navbar-nav mr-auto mt-md-0 ">
-                        <!-- This is  -->
-                        <li class="nav-item"> <a class="nav-link nav-toggler hidden-md-up text-muted waves-effect waves-dark" href="javascript:void(0)"><i class="ti-menu"></i></a> </li>
-                        <!-- <li class="nav-item hidden-sm-down">
-                            <form class="app-search p-l-20">
-                                <input type="text" class="form-control" placeholder="Search for..."> <a class="srh-btn"><i class="ti-search"></i></a>
-                            </form>
-                        </li>-->
-                    </ul>
-                    <!-- ============================================================== -->
-                    <!-- User profile and search -->
-                    <!-- ============================================================== -->
-                    <ul class="navbar-nav my-lg-0">
-                        <!--<li class="nav-item dropdown">
-                           <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Welcome , Admin</a>
-                            
-                        </li>-->
-                        {% if user.is_authenticated %}
-                            <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Welcome , Admin</a>
-                        {% endif %}
-                    </ul>
-                </div>
-            </nav>
-        </header>
-        <!-- ============================================================== -->
-        <!-- End Topbar header -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- Left Sidebar - style you can find in sidebar.scss  -->
-        <!-- ============================================================== -->
-        <aside class="left-sidebar">
-            <!-- Sidebar scroll-->
-            <div class="scroll-sidebar">
-                <!-- Sidebar navigation-->
-                <nav class="sidebar-nav">
-                    <ul id="sidebarnav">
-                        <li>
-                            <a href="index.html" class="waves-effect"><i class="fa fa-clock-o m-r-10" aria-hidden="true"></i>Dashboard</a>
-                        </li>
-                        {% block content %}
-                        {% if user.is_authenticated %}
-                        <li>
-                            <a href={% url 'logout' %} class="waves-effect"><i class="fa fa-info-circle m-r-10" aria-hidden="true"></i>Logout</a>
-                        </li>
-                        <li>
-                            <a href={% url 'upload' %} class="waves-effect"><i class="fa fa-table m-r-10" aria-hidden="true"></i>Upload</a>
-                        </li>
-                        {% else %}
-                        <li>
-                            <a href="{% url 'login' %}" class="waves-effect"><i class="fa fa-user m-r-10" aria-hidden="true"></i>Login</a>
-                        </li>
-                        {% endif %}
-                        {% endblock %}
-                       
-                    </ul>
-                    
-                </nav>
-                <!-- End Sidebar navigation -->
             </div>
-            <!-- End Sidebar scroll-->
-        </aside>
-        <!-- ============================================================== -->
-        <!-- End Left Sidebar - style you can find in sidebar.scss  -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- Page wrapper  -->
-        <!-- ============================================================== -->
-        <div class="page-wrapper">
-            <!-- ============================================================== -->
-            <!-- Container fluid  -->
-            <!-- ============================================================== -->
-            <div class="container-fluid">
-                <!-- ============================================================== -->
-                <!-- Bread crumb and right sidebar toggle -->
-                <!-- ============================================================== -->
-                <div class="row page-titles">
-                    <div class="col-md-6 col-8 align-self-center">
-                        <h3 class="text-themecolor m-b-0 m-t-0">Dashboard</h3>
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
-                            <li class="breadcrumb-item active">Dashboard</li>
-                        </ol>
-                    </div>
-
-                </div>
-                <!-- ============================================================== -->
-                <!-- End Bread crumb and right sidebar toggle -->
-                <!-- ============================================================== -->
-                <!-- ============================================================== -->
-                <!-- Start Page Content -->
-                <!-- ============================================================== -->
-                <!-- Row -->
-                <div class="row">
-                    <!-- Column -->
-                    <div class="col-sm-6">
-                        <div class="card">
-                            <div class="card-block">
-                                <h4 class="card-title">Daily Sales</h4>
-                                <div class="text-right">
-                                    <h2 class="font-light m-b-0"><i class="ti-arrow-up text-success"></i> $120</h2>
-                                    <span class="text-muted">Todays Income</span>
-                                </div>
-                                <span class="text-success">80%</span>
-                                <div class="progress">
-                                    <div class="progress-bar bg-success" role="progressbar" style="width: 80%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                            </div>
+            <!-- Column -->
+            <!-- Column -->
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-block">
+                        <h4 class="card-title">Weekly Sales</h4>
+                        <div class="text-right">
+                            <h2 class="font-light m-b-0"><i class="ti-arrow-up text-info"></i> $5,000</h2>
+                            <span class="text-muted">Todays Income</span>
                         </div>
-                    </div>
-                    <!-- Column -->
-                    <!-- Column -->
-                    <div class="col-sm-6">
-                        <div class="card">
-                            <div class="card-block">
-                                <h4 class="card-title">Weekly Sales</h4>
-                                <div class="text-right">
-                                    <h2 class="font-light m-b-0"><i class="ti-arrow-up text-info"></i> $5,000</h2>
-                                    <span class="text-muted">Todays Income</span>
-                                </div>
-                                <span class="text-info">30%</span>
-                                <div class="progress">
-                                    <div class="progress-bar bg-info" role="progressbar" style="width: 30%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Column -->
-                </div>
-                <!-- Row -->
-
-                <!-- Row -->
-                <div class="row">
-                    <!-- column -->
-                    <div class="col-sm-12">
-                        <div class="card">
-                            <div class="card-block">
-                                <h4 class="card-title">Revenue Statistics</h4>
-                                <div id="container"></div>
-  <script src="https://code.highcharts.com/highcharts.src.js"></script>
-
-                            </div>
-                        </div>
-                    </div>
-                    <!-- column -->
-                </div>
-                <!-- Row -->
-                <!-- Row -->
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="card">
-                            <div class="card-block">
-                                <script>
-                                Highcharts.chart('container', {
-    chart: {
-        plotBackgroundColor: null,
-        plotBorderWidth: null,
-        plotShadow: false,
-        type: 'pie'
-    },
-    title: {
-        text: 'Furniture in January, 2018'
-    },
-    tooltip: {
-        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-    },
-    plotOptions: {
-        pie: {
-            allowPointSelect: true,
-            cursor: 'pointer',
-            dataLabels: {
-                enabled: true,
-                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                style: {
-                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-                }
-            }
-        }
-    },
-    series: [{
-        name: 'Brands',
-        colorByPoint: true,
-        data: [{
-            name: 'General Chairs',
-            y: 61.41,
-            sliced: true,
-            selected: true
-        }, {
-            name: 'Dining Chairs',
-            y: 11.84
-        }, {
-            name: 'Office Chairs',
-            y: 10.85
-        }, {
-            name: 'Dining Tables',
-            y: 4.67
-        }, {
-            name: 'Wardrobes',
-            y: 4.18
-        }, {
-            name: 'Cupboards',
-            y: 1.64
-        }, {
-            name: 'Dressing Tables',
-            y: 1.6
-        }, {
-            name: 'Side Tables',
-            y: 1.2
-        }, {
-            name: 'Other',
-            y: 2.61
-        }]
-    }]
-});
-     </script>
-
-                            </div>
+                        <span class="text-info">30%</span>
+                        <div class="progress">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: 30%; height: 6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                     </div>
                 </div>
-                <!-- Row -->
-                <!-- Row -->
-                <div class="row">
-                    <!-- Column -->
-                    <div class="col-lg-4">
-                        <div class="card">
-                            <img class="card-img-top img-responsive" src="{% static 'assets/images/big/img1.jpg' %}" alt="Card">
-                            <div class="card-block">
-                                <ul class="list-inline font-14">
-                                    <li class="p-l-0">20 May 2016</li>
-                                    <li><a href="javascript:void(0)" class="link">3 Comment</a></li>
-                                </ul>
-                                <h3 class="font-normal">Featured Hydroflora Pots Garden &amp; Outdoors</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Column -->
-                    <!-- Column -->
-                    <div class="col-lg-4">
-                        <div class="card">
-                            <img class="card-img-top img-responsive" src="{% static 'assets/images/big/img2.jpg' %}" alt="Card">
-                            <div class="card-block">
-                                <ul class="list-inline font-14">
-                                    <li class="p-l-0">20 May 2016</li>
-                                    <li><a href="javascript:void(0)" class="link">3 Comment</a></li>
-                                </ul>
-                                <h3 class="font-normal">Featured Hydroflora Pots Garden &amp; Outdoors</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Column -->
-                    <!-- Column -->
-                    <div class="col-lg-4">
-                        <div class="card">
-                            <img class="card-img-top img-responsive" src="{% static 'assets/images/big/img4.jpg' %}" alt="Card">
-                            <div class="card-block">
-                                <ul class="list-inline font-14">
-                                    <li class="p-l-0">20 May 2016</li>
-                                    <li><a href="javascript:void(0)" class="link">3 Comment</a></li>
-                                </ul>
-                                <h3 class="font-normal">Featured Hydroflora Pots Garden &amp; Outdoors</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Column -->
-                </div>
-                <!-- Row -->
-                <!-- ============================================================== -->
-                <!-- End PAge Content -->
-                <!-- ============================================================== -->
             </div>
-            <!-- ============================================================== -->
-            <!-- End Container fluid  -->
-            <!-- ============================================================== -->
-            <!-- ============================================================== -->
-            <!-- footer -->
-            <!-- ============================================================== -->
-            <footer class="footer text-center">
-                © 2017 Monster Admin by wrappixel.com
-            </footer>
-            <!-- ============================================================== -->
-            <!-- End footer -->
-            <!-- ============================================================== -->
+            <!-- Column -->
         </div>
-        <!-- ============================================================== -->
-        <!-- End Page wrapper  -->
-        <!-- ============================================================== -->
-    </div>
-    <!-- ============================================================== -->
-    <!-- End Wrapper -->
-    <!-- ============================================================== -->
-    <!-- ============================================================== -->
-    <!-- All Jquery -->
-    <!-- ============================================================== -->
-    <script src="{% static 'assets/plugins/jquery/jquery.min.js' %}"></script>
-    <!-- Bootstrap tether Core JavaScript -->
-    <script src="{% static 'assets/plugins/bootstrap/js/tether.min.js' %}"></script>
-    <script src="{% static 'assets/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
-    <!-- slimscrollbar scrollbar JavaScript -->
-    <script src="{% static 'js/jquery.slimscroll.js' %}"></script>
-    <!--Wave Effects -->
-    <script src="{% static 'js/waves.js' %}"></script>
-    <!--Menu sidebar -->
-    <script src="{% static 'js/sidebarmenu.js' %}"></script>
-    <!--stickey kit -->
-    <script src="{% static 'assets/plugins/sticky-kit-master/dist/sticky-kit.min.js' %}"></script>
-    <!--Custom JavaScript -->
-    <script src="{% static 'js/custom.min.js' %}"></script>
-    <!-- ============================================================== -->
-    <!-- This page plugins -->
-    <!-- ============================================================== -->
-    <!-- Flot Charts JavaScript -->
-    <script src="{% static 'assets/plugins/flot/jquery.flot.js' %}"></script>
-    <script src="{% static 'assets/plugins/flot.tooltip/js/jquery.flot.tooltip.min.js' %}"></script>
-    <script src="{% static 'js/flot-data.js' %}"></script>
-    <!-- ============================================================== -->
-    <!-- Style switcher -->
-    <!-- ============================================================== -->
-    <script src="{% static 'assets/plugins/styleswitcher/jQuery.style.switcher.js' %}"></script>
-</body>
+        <!-- Row -->
 
-</html>
+        <!-- Row -->
+        <div class="row">
+            <!-- column -->
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-block">
+                        <h4 class="card-title">Revenue Statistics</h4>
+                        <div id="container"></div>
+                        <script src="https://code.highcharts.com/highcharts.src.js"></script>
+                    </div>
+                </div>
+            </div>
+            <!-- column -->
+        </div>
+        <!-- Row -->
+        <!-- Row -->
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-block">
+                        <script>
+                        Highcharts.chart('container', {
+                        chart: {
+                            plotBackgroundColor: null,
+                            plotBorderWidth: null,
+                            plotShadow: false,
+                            type: 'pie'
+                        },
+                        title: {
+                            text: 'Furniture in January, 2018'
+                        },
+                        tooltip: {
+                            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                        },
+                        plotOptions: {
+                            pie: {
+                                allowPointSelect: true,
+                                cursor: 'pointer',
+                                dataLabels: {
+                                    enabled: true,
+                                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                                    style: {
+                                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                                    }
+                                }
+                            }
+                        },
+                        series: [{
+                            name: 'Brands',
+                            colorByPoint: true,
+                            data: [{
+                                name: 'General Chairs',
+                                y: 61.41,
+                                sliced: true,
+                                selected: true
+                            }, {
+                                name: 'Dining Chairs',
+                                y: 11.84
+                            }, {
+                                name: 'Office Chairs',
+                                y: 10.85
+                            }, {
+                                name: 'Dining Tables',
+                                y: 4.67
+                            }, {
+                                name: 'Wardrobes',
+                                y: 4.18
+                            }, {
+                                name: 'Cupboards',
+                                y: 1.64
+                            }, {
+                                name: 'Dressing Tables',
+                                y: 1.6
+                            }, {
+                                name: 'Side Tables',
+                                y: 1.2
+                            }, {
+                                name: 'Other',
+                                y: 2.61
+                            }]
+                        }]
+                    });
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}

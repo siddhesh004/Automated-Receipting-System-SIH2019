@@ -20,6 +20,7 @@ body {
     overflow-x: hidden;
     color: $bodytext;
     font-weight: 300;
+    margin-top: 10px;
 }
 
 html {
@@ -43,6 +44,9 @@ a.link{
 }
 .img-rounded{
     border-radius: $radius;
+}
+.wrapper{
+    margin-top: 50px;
 }
 /*******************
 Headings
