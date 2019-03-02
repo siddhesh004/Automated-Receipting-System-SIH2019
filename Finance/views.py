@@ -73,7 +73,7 @@ def uploadView(request):
         now = datetime.datetime.now()
         receipt_list = ReceiptData.objects.filter(mailed_status=False)
         for receipt in receipt_list:
-            item = Items.objects.filter(invoice_no=receipt.invoice_no)
+            item = Items.objects.filter(invoice_no=receipt.invoice_no).filter(status=False)
             context = {
                 # 'receipt_no': receipt.invoice_no,
                 # 'receipt_amount': receipt.amount,
@@ -107,6 +107,9 @@ def uploadView(request):
             email.attach_file(file_path)
             email.send()
             receipt.mailed_status = True
+            for i in item:
+                i.status = True
+                i.save()
             receipt.save()
         messages.success(request, 'Email(s) sent successfully!')
         return redirect(home)
