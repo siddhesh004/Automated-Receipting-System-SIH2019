@@ -26,6 +26,8 @@ def home(request):
 
 @login_required()
 def uploadView(request):
+
+
     form = UploadForm(request.POST or None, request.FILES or None)
     if form.is_valid():
         upload = form.save(commit=False)
@@ -51,9 +53,9 @@ def uploadView(request):
                             up.document.save(n, ContentFile(myfile.read()))
                             # fyl = up.document
                             if n.endswith('.pdf'):
-                                extract_zip(n)
+                                extract_zip(n,request)
                             elif n.endswith('.jpg'):
-                                extract_image_zip(n)
+                                extract_image_zip(n,request)
                             else:
                                 print('File is NOT in correct format')
                                 form = UploadForm()
