@@ -58,6 +58,7 @@ class Items(models.Model):
     unit_price=models.CharField(max_length=10)
     total = models.CharField(max_length=10)
     company_name = models.CharField(max_length=50, blank=True, default='')
+    status = models.BooleanField(default=False)
 
 
 class Uploads(models.Model):
