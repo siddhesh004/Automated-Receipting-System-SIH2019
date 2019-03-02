@@ -239,17 +239,18 @@ def nlp(text,comp):
     for m in usefuldata:
         print(str(m) + " " + str(usefuldata[m]))
 
-
-    c1=Customer()
-    c1.customer_id=usefuldata["Customer ID"]
-    c1.customer_name="Soumya"
-    c1.customer_gender="Female"
-    c1.customer_email="soumya.koppaka@spit.ac.in"
-    c1.customer_address="Andheri"
-    c1.customer_phone=123456
-    c1.company_name = comp
-
-    c1.save()
+    try:
+        c1=Customer.objects.get(customer_id=usefuldata["Customer ID"])
+    except Customer.DoesNotExist:
+        c1 = None
+        c1.customer_id=usefuldata["Customer ID"]
+        c1.customer_name="Soumya"
+        c1.customer_gender="Female"
+        c1.customer_email="soumya.koppaka@spit.ac.in"
+        c1.customer_address="Andheri"
+        c1.customer_phone=123456
+        c1.company_name = comp
+        c1.save()
 
     r1=ReceiptData()
     r1.customer_id=c1
