@@ -7,11 +7,13 @@ from django.utils import timezone
 from django.views.generic import View
 
 from Finance import settings
-from Finance.pdf_extract import extract, extract_image
-from Finance.models import ReceiptData, Items, Customer
+from Finance.pdf_extract import extract, extract_image, extract_zip, extract_image_zip
+from Finance.models import ReceiptData, Items, Customer, Uploads
 from Finance.forms import UploadForm
 from Finance.render import Render
 import pdfkit, datetime, os
+from zipfile import ZipFile
+from django.core.files.base import ContentFile
 
 
 def home(request):
@@ -32,7 +34,6 @@ def uploadView(request):
             if filename.endswith('.jpg'):
                 print('File is a jpg')
                 upload.save()
-
                 extract_image(request)
             elif filename.endswith('.pdf'):
                 print('File is a pdf')
@@ -40,12 +41,29 @@ def uploadView(request):
                 extract(request)
             elif filename.endswith('.zip'):
                 print('File is a zip')
-                upload.save()
+                with ZipFile(upload.document) as zip_file:
+                    names = zip_file.namelist()
+                    for n in names:
+                        with zip_file.open(n) as myfile:
+                            up = Uploads()
+                            up.description = n
+                            up.document.save(n, ContentFile(myfile.read()))
+                            # fyl = up.document
+                            if n.endswith('.pdf'):
+                                extract_zip(n)
+                            elif n.endswith('.jpg'):
+                                extract_image_zip(n)
+                            else:
+                                print('File is NOT in correct format')
+                                form = UploadForm()
+                                return render(request, 'upload.html', {'form': form})
+                                raise form.ValidationError(
+                                    "File is not in format. Please upload only jpg,pdf,zip files")
             else:
                 print('File is NOT in correct format')
                 form = UploadForm()
                 return render(request, 'upload.html', {'form': form})
-                # raise form.ValidationError("File is not in format. Please upload only jpg,pdf,zip files")
+                raise form.ValidationError("File is not in format. Please upload only jpg,pdf,zip files")
 
         return render(request, 'index.html')
     form = UploadForm()
