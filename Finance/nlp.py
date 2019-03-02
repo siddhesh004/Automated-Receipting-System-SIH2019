@@ -1,10 +1,17 @@
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
+
 from nltk import pos_tag
 #import PyPDF2
 import re
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from tika import parser
+import re
 from .models import ReceiptData, Customer, Items
 def nlp(text):
+
+
+
+
     # FUnction to detect payment method
     def isPaymentMethod(x):
         payment_types_card = ["Card", "mastercard", "visa"]
@@ -12,7 +19,6 @@ def nlp(text):
         if x.lower() in payment_types_cheque:
             return True
         return False
-
 
     # Function to detect alphanumeric content
     def hasAlphanumeric(x):
@@ -24,18 +30,22 @@ def nlp(text):
             except AttributeError:
                 return ''
 
-
     # Function to detect Items
     def detectItems(x):
         itemregex1 = r'(\d+)\s*\n(\w+\s+)+\s*\n(\d+)\s*\n\$?(\d+\.\d{2})\s*\n\$?(\d+\.\d{2})\s*\n'
-        itemregex2 = r'([A-Z][\w\s\(\)]+)\s+(\d+)\s+\$?(\d+\.\d{2})\s+\$?(\d+\.\d{2})'
+        itemregex2 = r'([A-Z][\w\s\(\)]+)\s+(\d+)?\s+(Rs\.\s+)?\$?(\d+(\.\d{2})?)?\s+(Rs\.\s+)?\$?(\d+(\.\d{2})?)'
         itemlist = []
         itemdetails = re.findall(itemregex2, x)
         print(itemdetails)
         for items in itemdetails:
-            itemlist.append(list(items))
+            templist = []
+            for x in items:
+                if 'Rs.' not in x and len(x) > 0 and x[0] != '.':
+                    templist.append(x)
+            # itemlist.append(list(items))
+            itemlist.append(templist)
+        print(itemlist)
         return itemlist
-
 
     # Function to detect date regex
     def isInvoiceDate(x):
@@ -77,37 +87,37 @@ def nlp(text):
                 return ''
         return ''
 
-
     def hasAmountAtEnd(x):
-        amountregex = r'\d+$'
+        amountregex = r'\$?\d+\$?'
         if re.match(amountregex, x):
             return True
         return False
 
 
-    #filename = r'C:\Users\Suyash\Downloads\TestPDF\JPG\3.pdf'
-    #pdfFileObj = open(filename, 'rb')
-    #pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
-    #num_pages = pdfReader.numPages
+    '''
+    pdfFileObj = open(filename,'rb')
+    pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
+    num_pages = pdfReader.numPages
     count = 0
-    #text = ""
+    text = ""
 
-    # The while loop will read each page
-    #while count < num_pages:
-     #   pageObj = pdfReader.getPage(count)
-      #  count += 1
-       # text += pageObj.extractText()
+    #The while loop will read each page
+    while count < num_pages:
+        pageObj = pdfReader.getPage(count)
+        count +=1
+        text += pageObj.extractText()
+
+    '''
     temp = ""
-
     for c in text:
         if c != ',':
             temp = temp + c
     text = temp
-    #print(text)
-    #print()
-    #print()
-    #print(repr(text))
-    #print()
+    # print(text)
+    print()
+    print()
+    print(repr(text))
+    print()
     usefuldata = {}
     usefuldata["Invoice Number"] = ""
     usefuldata["Total Bill"] = ""
@@ -149,19 +159,21 @@ def nlp(text):
     #	print(str(x)+"  "+str(lowerdicttagwords[x]))
     '''
     for lineno in range(len(info)):
-        line=info[lineno]
-        if line[len(line)-1]==':':
-            line=line+info[lineno+1]
-            del info[lineno+1]
-            continue
-        wordsinline=line.split(" ")
-        count=0
-        for z in wordsinline:
-            if dicttagwords[z]=="NN" or dicttagwords[z]=="NNP":
+    	line=info[lineno]
+    	if line[len(line)-1]==':':
+    		line=line+info[lineno+1]
+    		del info[lineno+1]
+    		continue
+    	wordsinline=line.split(" ")
+    	count=0
+    	for z in wordsinline:
+    		if dicttagwords[z]=="NN" or dicttagwords[z]=="NNP":
     '''
 
     for lineno in range(len(info)):
+
         line = info[lineno]
+        print(line)
         tokensinline = word_tokenize(line)
         lowertokensinline = word_tokenize(line.lower())
         '''for x in tokensinline:
@@ -172,6 +184,8 @@ def nlp(text):
         tablecol = False
         if isInvoiceDate(line) and usefuldatadetect["Date"] == False:
             usefuldata["Date"] = x
+            usefuldatadetect["Date"] = True
+            print("Date found")
         '''for y in range(len(colpossible)):
             if dicttagwords[colpossible[y]]=='NNP' and lowerdicttagwords[lowercolpossible [y]]=='NN':
                 continue
@@ -186,12 +200,12 @@ def nlp(text):
                 if x.lower() in interest_words[1]:
                     interest_count[1] = interest_count[1] + 1
                 if x.lower() in interest_words[2]:
-                    #print("For CustID: " + line)
+                    print("For CustID: " + line)
                     interest_count[2] = interest_count[2] + 1
                 if x.lower() in interest_words[3]:
                     interest_count[3] = interest_count[3] + 1
                 if isPaymentMethod(x):
-                    #print("payment detected :" + x)
+                    print("payment detected :" + x)
                     usefuldata["Payment method"] = "cheque"
 
                 if isInvoiceDate(x) != '':
@@ -200,29 +214,32 @@ def nlp(text):
             if interest_count[1] > 0:
                 if hasAmountAtEnd(tokensinline[len(tokensinline) - 1]):
                     usefuldata["Total Bill"] = tokensinline[len(tokensinline) - 1]
-                else:
-                    usefuldata["Total Bill"] = info[lineno + 1]
+
             elif interest_count[0] > 0:
                 if interest_count[0] >= interest_count[2]:
                     if hasAmountAtEnd(tokensinline[len(tokensinline) - 1]):
                         usefuldata["Invoice Number"] = tokensinline[len(tokensinline) - 1]
                     else:
                         usefuldata["Invoice Number"] = info[lineno + 1]
-            elif interest_count[2] > 0:
+            elif interest_count[2] > 0 and usefuldatadetect['Customer ID'] == False:
                 if hasAlphanumeric(tokensinline[len(tokensinline) - 1]):
                     usefuldata["Customer ID"] = tokensinline[len(tokensinline) - 1]
                 else:
                     usefuldata["Customer ID"] = info[lineno + 1]
-   # print("Trial is : ")
+                usefuldatadetect["Customer ID"] = True
+    print("Trial is : ")
+
+    mydate = isInvoiceDate("28 February 2019")
+    print("My date " + mydate)
 
     usefuldata["Items"] = detectItems(text)
 
-   # print()
-    #print()
+    print()
+    print()
     for m in usefuldata:
         print(str(m) + " " + str(usefuldata[m]))
 
-    print(usefuldata["Items"][0])
+    print("XOXO",usefuldata["Total Bill"])
     c1=Customer()
     c1.customer_id=usefuldata["Customer ID"]
     c1.customer_name="Soumya"
@@ -239,6 +256,7 @@ def nlp(text):
     r1.mode = usefuldata["Payment method"]
     r1.save()
     #i1=Items()
+
     objs = [Items() for i in range(len(usefuldata["Items"]))]
     for i in range(len(usefuldata["Items"])):
         #other_object.add(obj)

@@ -19,22 +19,23 @@ class Customer(models.Model):
     )
     customer_gender = models.CharField(max_length=6, choices=Gender, default='Male')
 
+
 class ReceiptData(models.Model):
     invoice_no = models.IntegerField(default = 0, unique=True, primary_key=True)
     #vendor_name = models.CharField(max_length=100, default='')
     customer_id=models.ForeignKey(Customer, on_delete=models.CASCADE)
     date = models.CharField(max_length=10)
-    amount = models.CharField(max_length=1)
+    amount = models.CharField(max_length=10)
     #commodity = models.CharField(max_length=500, default='')
     Mode = (
-        ('card', 'Cash'),
-        ('cheque', 'Cheque')
+        ('Card', 'cash'),
+        ('Cheque', 'cheque')
     )
     mode = models.CharField(max_length=6, choices=Mode, default='Cheque')
     card_no = models.IntegerField(default=0000000000000000)
     cheque_no = models.IntegerField(default=0)
-    bank_name = models.CharField(max_length=100, default='')
-    email=models.EmailField(max_length=50, default='')
+    bank_name = models.CharField(max_length=100, default='',blank=True)
+
 
 class Items(models.Model):
     invoice_no=models.ForeignKey(ReceiptData, on_delete=models.CASCADE)

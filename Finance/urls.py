@@ -24,7 +24,6 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('upload/', views.uploadView, name='upload'),
     path('render/pdf/', views.Pdf.as_view()),
-    path('visualize/',views.visualize),
-    #path('', TemplateView.as_view(template_name='index.html'), name='home'),
-    #path()
+    path('pdf/',views.pdf_view),
+
 ]

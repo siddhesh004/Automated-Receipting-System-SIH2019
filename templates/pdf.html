@@ -100,6 +100,10 @@
 </head>
 
 <body>
+{#    {{ receipt }}#}
+{#    {{ item }}#}
+{#    {{ today }}#}
+{#    {% for x,y  in receipts.items %}#}
     <div class="invoice-box">
         <table cellpadding="0" cellspacing="0">
             <tr class="top">
@@ -111,16 +115,17 @@
                             </td>
 
                             <td>
-                                Invoice #: 123<br>
-                                Created: January 1, 2015<br>
-                                Due: February 1, 2015
+                                Invoice Number:{{ receipt.invoice_no }}<br>
+                                Customer ID: {{ receipt.customer_id.customer_id }}<br>
+                                Created: {{ receipt.date }}<br>
+                                Paid: {{ today }}
                             </td>
                         </tr>
                     </table>
                 </td>
             </tr>
 
-            <tr class="information">
+            <!---<tr class="information">
                 <td colspan="2">
                     <table>
                         <tr>
@@ -138,73 +143,74 @@
                         </tr>
                     </table>
                 </td>
-            </tr>
+            </tr>--->
 
             <tr class="heading">
-                <td>
+                <td colspan="4">
                     Payment Method
                 </td>
 
-                <td>
-                    Check #
-                </td>
+{#                <td>#}
+{#                    {% if receipt.mode == card %}#}
+{#                        Card ##}
+{#                    {% else %}#}
+{#                        Cheque ##}
+{#                    {% endif %}#}
+{##}
+{#                </td>#}
             </tr>
 
             <tr class="details">
-                <td>
-                    Check
+                <td colspan="4">
+                    {{ receipt.mode }}
                 </td>
 
-                <td>
-                    1000
-                </td>
+{#                <td>#}
+{#                    {% if receipt.mode == card %}#}
+{#                        {{ receipt.card_no }}#}
+{#                    {% else %}#}
+{#                        {{ receipt.cheque_no }}#}
+{#                    {% endif %}#}
+{#                </td>#}
             </tr>
 
             <tr class="heading">
                 <td>
                     Item
                 </td>
-
                 <td>
-                    Price
+                    Quantity
+                </td>
+                <td>
+                    Unit Price
+                </td>
+                <td>
+                    Total
                 </td>
             </tr>
 
-            <tr class="item">
-                <td>
-                    Website design
-                </td>
-
-                <td>
-                    $300.00
-                </td>
-            </tr>
-
-            <tr class="item">
-                <td>
-                    Hosting (3 months)
-                </td>
-
-                <td>
-                    $75.00
-                </td>
-            </tr>
-
-            <tr class="item last">
-                <td>
-                    Domain name (1 year)
-                </td>
-
-                <td>
-                    $10.00
-                </td>
-            </tr>
+            {% for x in item %}
+                <tr class="item">
+                    <td>
+                        {{ x.item_name  }}
+                    </td>
+                    <td>
+                        {{ x.quant }}
+                    </td>
+                    <td>
+                        {{ x.unit_price }}
+                    </td>
+                    <td>
+                        {{ x.total }}
+                    </td>
+                </tr>
+            {% endfor %}
 
             <tr class="total">
                 <td></td>
 
                 <td>
-                   Total: $385.00
+                   Total: {{ receipt.amount }}
                 </td>
             </tr>
         </table>

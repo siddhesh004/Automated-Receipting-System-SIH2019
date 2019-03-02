@@ -14,6 +14,8 @@ src/*.egg-info
 lib
 lib64
 venv
+venv/
+venv/.
 
 # compiled output
 /dist
@@ -48,7 +50,7 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
-
+/venv
 # System Files
 .DS_Store
 Thumbs.db
