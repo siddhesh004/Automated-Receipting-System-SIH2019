@@ -23,6 +23,7 @@ urlpatterns = [
     path ('', views.home, name = 'home'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('upload/', views.uploadView, name='upload'),
+    path('log/', views.log_view, name='log')
     # path('pdf/',views.pdf_view),
 
 ]
