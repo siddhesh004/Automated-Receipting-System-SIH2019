@@ -47,7 +47,7 @@ class ReceiptData(models.Model):
 
     company_name = models.CharField(max_length=50, blank=True, default='')
 
-
+    original_filename = models.CharField(max_length=50, blank=True, default='')
     mailed_status = models.BooleanField(default=False)
 
 

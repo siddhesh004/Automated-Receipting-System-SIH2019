@@ -35,14 +35,16 @@ def uploadView(request):
         var = request.FILES['document'].name
         if var:
             filename = var
+            test = 0
             if filename.endswith('.jpg'):
                 print('File is a jpg')
                 upload.save()
-                extract_image(request)
+                con, test = extract_image(filename,request)
             elif filename.endswith('.pdf'):
                 print('File is a pdf')
                 upload.save()
-                extract(request)
+                con, test = extract(filename,request)
+
             elif filename.endswith('.zip'):
                 print('File is a zip')
                 with ZipFile(upload.document) as zip_file:
@@ -54,30 +56,38 @@ def uploadView(request):
                             up.document.save(n, ContentFile(myfile.read()))
                             # fyl = up.document
                             if n.endswith('.pdf'):
-                                extract_zip(n,request)
+                                con, test = extract_zip(n,request)
                             elif n.endswith('.jpg'):
-                                extract_image_zip(n,request)
+                                con, test = extract_image_zip(n,request)
                             else:
                                 print('File is NOT in correct format')
                                 form = UploadForm()
                                 return render(request, 'upload.html', {'form': form})
                                 raise form.ValidationError(
                                     "File is not in format. Please upload only jpg,pdf,zip files")
+                            if test == 1:
+                                messages.error(request, str(n) + " has missing fields: " + str(con['report']))
+                                return redirect(home)
             else:
                 print('File is NOT in correct format')
                 form = UploadForm()
                 return render(request, 'upload.html', {'form': form})
                 raise form.ValidationError("File is not in format. Please upload only jpg,pdf,zip files")
+
+            if test == 1:
+                messages.error(request, str(filename)+" has missing fields: "+str(con['report']))
+                return redirect(home)
+
         path_wkthmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
         config = pdfkit.configuration(wkhtmltopdf=path_wkthmltopdf)
         now = datetime.datetime.now()
         receipt_list = ReceiptData.objects.filter(mailed_status=False)
+
+        # error_report = []
+        # err_flag = 0
         for receipt in receipt_list:
             item = Items.objects.filter(invoice_no=receipt.invoice_no).filter(status=False)
             context = {
-                # 'receipt_no': receipt.invoice_no,
-                # 'receipt_amount': receipt.amount,
-                # 'receipt_customer': receipt.,
                 'receipt': receipt,
                 'item': item,
                 'today': now.strftime("%d-%m-%Y"),
@@ -87,7 +97,6 @@ def uploadView(request):
             print(receipt.amount)
             print(type(item))
             template = get_template('pdf.html')
-            # c = Context(context)
             html = template.render(context)
             options = {
                 'page-size': 'Letter',
@@ -96,9 +105,6 @@ def uploadView(request):
             filename = receipt.invoice_no
             file_path = os.path.join("pdf\%s.pdf" % filename)
             pdf = pdfkit.from_string(html, file_path, options, configuration=config)
-            # response = HttpResponse(pdf, content_type='application/pdf')
-            # filename = request.user.username + randint(1, 10000)
-            # response['Content-Disposition'] = 'attachment; filename = ""'
             recipients = []
             for user in Customer.objects.filter(customer_id=receipt.customer_id.customer_id):
                 recipients.append(user.customer_email)

@@ -16,6 +16,7 @@ lib64
 venv
 venv/
 venv/.
+/venv
 
 # compiled output
 /dist
@@ -54,3 +55,6 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+templates/Media/.
+templates/Media

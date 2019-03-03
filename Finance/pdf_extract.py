@@ -13,7 +13,7 @@ from PIL import Image
 pytesseract.pytesseract.tesseract_cmd = r"C:\\Program Files (x86)\\Tesseract-OCR\\tesseract.exe"
 
 
-def extract(request):
+def extract(name, request):
 
     logger = request.user
     comp = logger.company_name.company_name
@@ -32,9 +32,9 @@ def extract(request):
     raw = parser.from_file(finalpath)
     print(raw['content'])
 
-    nlp(raw['content'],comp)
+    return nlp(request,raw['content'],comp,name)
 
-def extract_image(request):
+def extract_image(name, request):
 
 
     file = request.FILES['document']
@@ -56,7 +56,7 @@ def extract_image(request):
     text = pytesseract.image_to_string(Image.open(filename), lang="eng")
     os.remove(filename)
     print(text)
-    nlp(text,comp)
+    return nlp(request,text,comp,name)
 
 
 def extract_zip(name,request):
@@ -67,7 +67,7 @@ def extract_zip(name,request):
     print(finalpath)
     raw = parser.from_file(finalpath)
     print(raw['content'])
-    nlp(raw['content'],comp)
+    return nlp(request,raw['content'],comp,name)
 
 
 def extract_image_zip(name,request):
@@ -88,5 +88,4 @@ def extract_image_zip(name,request):
         os.remove(filename)
 
         print(text)
-        nlp(text,comp)
-
+        return nlp(request,text,comp,name)

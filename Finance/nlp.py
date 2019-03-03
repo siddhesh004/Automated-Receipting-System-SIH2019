@@ -1,4 +1,4 @@
-
+from django.shortcuts import render
 from nltk import pos_tag
 #import PyPDF2
 import re
@@ -7,7 +7,7 @@ from nltk.corpus import stopwords
 from tika import parser
 import re
 from .models import ReceiptData, Customer, Items
-def nlp(text,comp):
+def nlp(request,text,comp,name):
 
 
 
@@ -130,7 +130,7 @@ def nlp(text,comp):
     lowertext = text.lower()
     lowerinfo = lowertext.split("\n")
     # for x in info:
-    #	print(x)
+    #  print(x)
     interest_words = [["invoice", "number", "no.", "No"], ["bill", "total", "amount"],
                       ["account", "number", "No.", "No", "customer"], ["invoice", "date"],
                       ["cheque", "card", "visa", "mastercard"]]
@@ -154,20 +154,20 @@ def nlp(text,comp):
     usefuldatadetect["Date"] = False
     usefuldatadetect["Payment method"] = True
     # for x in dicttagwords:
-    #	print(str(x)+"  "+str(dicttagwords[x]))
+    #  print(str(x)+"  "+str(dicttagwords[x]))
     # for x in lowerdicttagwords:
-    #	print(str(x)+"  "+str(lowerdicttagwords[x]))
+    #  print(str(x)+"  "+str(lowerdicttagwords[x]))
     '''
     for lineno in range(len(info)):
-    	line=info[lineno]
-    	if line[len(line)-1]==':':
-    		line=line+info[lineno+1]
-    		del info[lineno+1]
-    		continue
-    	wordsinline=line.split(" ")
-    	count=0
-    	for z in wordsinline:
-    		if dicttagwords[z]=="NN" or dicttagwords[z]=="NNP":
+       line=info[lineno]
+       if line[len(line)-1]==':':
+          line=line+info[lineno+1]
+          del info[lineno+1]
+          continue
+       wordsinline=line.split(" ")
+       count=0
+       for z in wordsinline:
+          if dicttagwords[z]=="NN" or dicttagwords[z]=="NNP":
     '''
 
     for lineno in range(len(info)):
@@ -239,6 +239,26 @@ def nlp(text,comp):
     for m in usefuldata:
         print(str(m) + " " + str(usefuldata[m]))
 
+
+    list = []
+    flag = 0
+    if usefuldata['Invoice Number'] == '':
+        flag = 1
+        list.append('Invoice Number')
+    if usefuldata['Customer ID'] == '':
+        flag = 1
+        list.append('Customer ID')
+    if usefuldata['Total Bill'] == '':
+        flag = 1
+        list.append('Amount')
+    if usefuldata['Payment method'] == '':
+        flag = 1
+        list.append('Mode of Transaction')
+
+    if flag == 1:
+        print("Error exists")
+        return {'report': list}, flag
+
     try:
         c1=Customer.objects.get(customer_id=usefuldata["Customer ID"])
     except Customer.DoesNotExist:
@@ -258,7 +278,8 @@ def nlp(text,comp):
     r1.amount = usefuldata["Total Bill"]
     r1.date = usefuldata["Date"]
     r1.mode = usefuldata["Payment method"]
-    r1.company_name= comp
+    r1.company_name = comp
+    r1.original_filename = name
     r1.save()
     #i1=Items()
 
@@ -273,3 +294,5 @@ def nlp(text,comp):
         objs[i].total=usefuldata["Items"][i][3]
         objs[i].company_name=comp
         objs[i].save()
+
+    return {},flag
