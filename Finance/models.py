@@ -71,6 +71,6 @@ class Uploads(models.Model):
 
 class Logs(models.Model):
     original_filename = models.CharField(max_length=50, blank=True, default='')
-    invoice_no = models.IntegerField(default=0, unique=True)
+    invoice_no = models.IntegerField(default=0)
     timestamp = models.CharField(max_length=50, default='')
     status = models.BooleanField(default=False)

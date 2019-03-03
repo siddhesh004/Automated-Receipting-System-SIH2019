@@ -78,7 +78,7 @@ def uploadView(request):
 
     form = UploadForm(request.POST or None, request.FILES or None)
     if form.is_valid():
-        f = open("templates\\Media\\error.csv", 'a')
+        f = open("templates\\error.csv", 'a')
         myfile = File(f)
         upload = form.save(commit=False)
         var = request.FILES['document'].name
@@ -99,15 +99,15 @@ def uploadView(request):
                 with ZipFile(upload.document) as zip_file:
                     names = zip_file.namelist()
                     for n in names:
-                        with zip_file.open(n) as myfile:
+                        with zip_file.open(n) as myfi:
                             up = Uploads()
                             up.description = n
-                            up.document.save(n, ContentFile(myfile.read()))
+                            up.document.save(n, ContentFile(myfi.read()))
                             # fyl = up.document
                             if n.endswith('.pdf'):
                                 con, test = extract_zip(n,request)
                             elif n.endswith('.jpg'):
-                                con, test = extract_image_zip(n,request)
+                                con, test = extract_image_zip(n,request,filename)
                             else:
                                 print('File is NOT in correct format')
                                 form = UploadForm()
@@ -216,12 +216,12 @@ def loginview(request):
 #login_required()
 #@background(schedule=0)
 def continuousUpload():
-    while os.listdir('templates/Media'):
-        for filename in os.listdir('templates/Media'):
+    while os.listdir('templates/Upload'):
+        for filename in os.listdir('templates/Upload'):
             if filename.endswith(".zip"):
-                with ZipFile(os.path.join('templates/Media', filename), 'r') as zip:
-                    zip.extractall(os.path.join('templates/Media'))
-                os.remove(os.path.join('templates/Media', filename))
+                with ZipFile(os.path.join('templates/Upload', filename), 'r') as zip:
+                    zip.extractall(os.path.join('templates/Upload'))
+                os.remove(os.path.join('templates/Upload', filename))
                 continue;
             elif filename.endswith(".jpg"):
                 pdf_extract.extract_image_file(filename)
@@ -258,10 +258,16 @@ def continuousUpload():
                 email.attach_file(file_path)
                 email.send()
                 os.remove(file_path)
-                os.remove(os.path.join('templates/Media', filename))
+                os.remove(os.path.join('templates/Upload', filename))
                 receipt.mailed_status = True
                 receipt.save()
-                print("done nannnnnan")
+                #print("done nannnnnan")
+            log = Logs()
+            log.original_filename = filename
+            log.invoice_no = receipt.invoice_no
+            log.timestamp = datetime.datetime.now()
+            log.status = True
+            log.save()
     return redirect('home')
 
 def log_view(request):

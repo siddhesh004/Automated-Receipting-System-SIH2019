@@ -34,7 +34,7 @@ def extract(name, request):
     raw = parser.from_file(finalpath)
     print(raw['content'])
 
-    return nlp(request,raw['content'],comp,name)
+    return nlp(raw['content'],comp,name)
 
 def extract_image(name, request):
 
@@ -58,7 +58,7 @@ def extract_image(name, request):
     text = pytesseract.image_to_string(Image.open(filename), lang="eng")
     os.remove(filename)
     print(text)
-    return nlp(request,text,comp,name)
+    return nlp(text,comp,name)
 
 
 def extract_zip(name,request):
@@ -69,7 +69,7 @@ def extract_zip(name,request):
     print(finalpath)
     raw = parser.from_file(finalpath)
     print(raw['content'])
-    return nlp(request,raw['content'],comp,name)
+    return nlp(raw['content'],comp,name)
 
 
 def extract_image_zip(name,request):
@@ -97,7 +97,7 @@ def extract_file(filename):
     comp = User.objects.get(username=logger)
     comp = comp.company_name.company_name
     # print ("---------------------------------------"+comp.dtype+"----------------------------------------")
-    raw = parser.from_file("templates\\Media\\" + filename)
+    raw = parser.from_file("templates\\Upload\\" + filename)
     print(raw['content'])
     nlp(raw['content'], comp, filename)
 
@@ -106,7 +106,7 @@ def extract_image_file(filename):
     logger = "siddhesh"
     comp = User.objects.get(username=logger)
     comp = comp.company_name.company_name
-    finalpath = "templates\\Media\\" + filename
+    finalpath = "templates\\Upload\\" + filename
     image = cv2.imread(finalpath)
     if image is not None:
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
