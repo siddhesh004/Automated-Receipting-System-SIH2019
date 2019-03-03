@@ -16,6 +16,7 @@ import pdfkit, datetime, os
 from zipfile import ZipFile
 from django.core.files.base import ContentFile
 from django.contrib import messages
+from django.core.files import File
 
 
 def home(request):
@@ -66,6 +67,8 @@ def uploadView(request):
 
     form = UploadForm(request.POST or None, request.FILES or None)
     if form.is_valid():
+        f = open("templates\\Media\\error.csv", 'a')
+        myfile = File(f)
         upload = form.save(commit=False)
         var = request.FILES['document'].name
         if var:
@@ -101,8 +104,10 @@ def uploadView(request):
                                 raise form.ValidationError(
                                     "File is not in format. Please upload only jpg,pdf,zip files")
                             if test == 1:
+                                myfile.write(str(n) + "," + str(con['report']) + "\n")
                                 messages.error(request, str(n) + " has missing fields: " + str(con['report']))
                                 return redirect(home)
+
             else:
                 print('File is NOT in correct format')
                 form = UploadForm()
@@ -110,6 +115,7 @@ def uploadView(request):
                 raise form.ValidationError("File is not in format. Please upload only jpg,pdf,zip files")
 
             if test == 1:
+                myfile.write(str(filename) + "," + str(con['report']) + "\n")
                 messages.error(request, str(filename)+" has missing fields: "+str(con['report']))
                 return redirect(home)
 
