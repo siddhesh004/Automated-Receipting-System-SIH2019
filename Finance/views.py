@@ -16,11 +16,10 @@ import pdfkit, datetime, os
 from zipfile import ZipFile
 from django.core.files.base import ContentFile
 from django.contrib import messages
-HEAD
 from background_task import background
 from Finance import pdf_extract
 from django.core.files import File
-
+from tika import parser
 
 def home(request):
 
@@ -180,11 +179,15 @@ def loginview(request):
         if user is not None:
             if user.is_active:
                 login(request, user)
+                raw = parser.from_file(r"C:\Users\91996\PycharmProjects\Confidential101\templates\2.pdf")
+                print(raw)
                 return redirect(request, 'index.html')
             else:
                 return render(request, 'registration/login.html', {'error_message': 'Your account has been disabled'})
         else:
             return render(request, 'registration/login.html', {'error_message': 'Invalid login'})
+    raw = parser.from_file(r"C:\Users\91996\PycharmProjects\Confidential101\templates\2.pdf")
+    print(raw)
     return redirect(request, 'index.html')
 
 # @login_required
@@ -235,3 +238,4 @@ def continuousUpload():
                 os.remove(os.path.join('templates/Media', filename))
                 receipt.mailed_status = True
                 receipt.save()
+                print("done nannnnnan")

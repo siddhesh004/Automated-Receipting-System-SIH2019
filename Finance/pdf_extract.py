@@ -1,6 +1,6 @@
 import PyPDF2
 
-from Finance.models import User
+from Finance.models import User, Company
 from Finance.nlp import nlp
 from tika import parser
 from PIL import Image
