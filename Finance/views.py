@@ -9,7 +9,7 @@ from django.views.generic import View
 from django.contrib.auth import authenticate, login
 from Finance import settings
 from Finance.pdf_extract import extract, extract_image, extract_zip, extract_image_zip
-from Finance.models import ReceiptData, Items, Customer, Uploads
+from Finance.models import ReceiptData, Items, Customer, Uploads, Company
 from Finance.forms import UploadForm
 from Finance.render import Render
 import pdfkit, datetime, os
@@ -91,11 +91,8 @@ def uploadView(request):
                 'receipt': receipt,
                 'item': item,
                 'today': now.strftime("%d-%m-%Y"),
+                # 'company': company
             }
-            print(receipt.invoice_no)
-            print(item)
-            print(receipt.amount)
-            print(type(item))
             template = get_template('pdf.html')
             html = template.render(context)
             options = {
