@@ -9,54 +9,63 @@ from django.views.generic import View
 from django.contrib.auth import authenticate, login
 from Finance import settings
 from Finance.pdf_extract import extract, extract_image, extract_zip, extract_image_zip
-from Finance.models import ReceiptData, Items, Customer, Uploads
+from Finance.models import ReceiptData, Items, Customer, Uploads, Company
 from Finance.forms import UploadForm
 from Finance.render import Render
 import pdfkit, datetime, os
 from zipfile import ZipFile
 from django.core.files.base import ContentFile
 from django.contrib import messages
+HEAD
 from background_task import background
 from Finance import pdf_extract
-
+from django.core.files import File
 
 
 def home(request):
 
     items1 = Items.objects.all()
-    curuser=request.user
-    currentcompany=curuser.company_name
-    total_sales=0.0
-    total_item_sales=0.0
-    itemsales={}
-    salesincard=0.0
-    salesincheque=0.0
-    print("Current Company "+str(currentcompany))
-    receipts=ReceiptData.objects.filter(company_name=currentcompany.company_name)
-    for rec in receipts:
-        total_sales=total_sales+float(rec.amount)
-        print("Mode : "+str(rec.mode))
-        if str(rec.mode) == 'cheque':
-            salesincheque=salesincheque+float(rec.amount)
-        else:
-            salesincard=salesincard+float(rec.amount)
+    receiptFlag = False
+    itemsales = {}
+    piechart1 = {}
 
-    percentcard=salesincard*100/total_sales
-    percentcheque=salesincheque*100/total_sales
-    print(percentcard)
-    print(percentcheque)
-    piechart1={}
-    piechart1['card']=percentcard
-    piechart1['cheque']=percentcheque
-    for it in items1:
-        total_item_sales=total_item_sales+float(it.total)
-        if it.item_name in itemsales.keys():
-            itemsales[it.item_name]=itemsales[it.item_name]+float(it.total)
-        else:
-            itemsales[it.item_name]=float(it.total)
+    if request.user.is_authenticated:
+        curuser=request.user
+        currentcompany=curuser.company_name
+        total_sales=0.0
+        total_item_sales=0.0
+        salesincard=0.0
+        salesincheque=0.0
+
+        #print("Current Company "+str(currentcompany))
+        receipts=ReceiptData.objects.filter(company_name=currentcompany.company_name)
+        if receipts.exists():
+            for rec in receipts:
+                total_sales=total_sales+float(rec.amount)
+                print("Mode : "+str(rec.mode))
+                if str(rec.mode) == 'cheque':
+                    salesincheque=salesincheque+float(rec.amount)
+                else:
+                    salesincard=salesincard+float(rec.amount)
+
+            percentcard=salesincard*100/total_sales
+            percentcheque=salesincheque*100/total_sales
+            print(percentcard)
+            print(percentcheque)
+            piechart1['card']=percentcard
+            piechart1['cheque']=percentcheque
+            receiptFlag=True
+
+        for it in items1:
+            total_item_sales=total_item_sales+float(it.total)
+            if it.item_name in itemsales.keys():
+                itemsales[it.item_name]=itemsales[it.item_name]+float(it.total)
+            else:
+                itemsales[it.item_name]=float(it.total)
 
     context={
         'piechart1':piechart1,
+        'receiptFlag':receiptFlag,
     }
 
     for x in items1:
@@ -69,6 +78,8 @@ def uploadView(request):
 
     form = UploadForm(request.POST or None, request.FILES or None)
     if form.is_valid():
+        f = open("templates\\Media\\error.csv", 'a')
+        myfile = File(f)
         upload = form.save(commit=False)
         var = request.FILES['document'].name
         if var:
@@ -104,8 +115,10 @@ def uploadView(request):
                                 raise form.ValidationError(
                                     "File is not in format. Please upload only jpg,pdf,zip files")
                             if test == 1:
+                                myfile.write(str(n) + "," + str(con['report']) + "\n")
                                 messages.error(request, str(n) + " has missing fields: " + str(con['report']))
                                 return redirect(home)
+
             else:
                 print('File is NOT in correct format')
                 form = UploadForm()
@@ -113,6 +126,7 @@ def uploadView(request):
                 raise form.ValidationError("File is not in format. Please upload only jpg,pdf,zip files")
 
             if test == 1:
+                myfile.write(str(filename) + "," + str(con['report']) + "\n")
                 messages.error(request, str(filename)+" has missing fields: "+str(con['report']))
                 return redirect(home)
 
@@ -129,11 +143,8 @@ def uploadView(request):
                 'receipt': receipt,
                 'item': item,
                 'today': now.strftime("%d-%m-%Y"),
+                # 'company': company
             }
-            print(receipt.invoice_no)
-            print(item)
-            print(receipt.amount)
-            print(type(item))
             template = get_template('pdf.html')
             html = template.render(context)
             options = {

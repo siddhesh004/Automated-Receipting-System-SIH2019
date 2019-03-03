@@ -242,14 +242,46 @@ def nlp(request,text,comp,name):
         print(str(m) + " " + str(usefuldata[m]))
 
 
+
     list = []
     flag = 0
+    new_id = usefuldatadetect['Customer ID']
+    if new_id == '':
+        flag = 1
+        list.append('Customer ID')
+    else:
+        c = Customer.objects.all()
+        cust_list = []
+        for i in c:
+            cust_list.append(i.customer_id)
+        match_list = []
+        for i in cust_list:
+            match = 0
+            for j in range(10):
+                if i[j] == new_id[j]:
+                    match += 1
+            match_list.append(match)
+        x = len(cust_list)
+        match_list.append(0)
+        for i in range(len(match_list)):
+            if (match_list[i] > match_list[x]):
+                x = i
+        if match_list[x] > 8:
+            new_id = cust_list[x]
+        else:
+            flag = 1
+            list.append('Customer ID')
     if usefuldata['Invoice Number'] == '':
         flag = 1
         list.append('Invoice Number')
-    if usefuldata['Customer ID'] == '':
-        flag = 1
-        list.append('Customer ID')
+    # if usefuldata['Customer ID'] == '':
+    #     flag = 1
+    #     list.append('Customer ID')
+    # try:
+    #     c1=Customer.objects.get(customer_id=usefuldata["Customer ID"])
+    # except Customer.DoesNotExist:
+    #     flag = 1
+    #     list.append('Customer ID')
     if usefuldata['Total Bill'] == '':
         flag = 1
         list.append('Amount')
@@ -261,24 +293,26 @@ def nlp(request,text,comp,name):
         print("Error exists")
         return {'report': list}, flag
 
-    try:
-        c1=Customer.objects.get(customer_id=usefuldata["Customer ID"])
-    except Customer.DoesNotExist:
-        c1 = Customer()
-        c1.customer_id=usefuldata["Customer ID"]
-        c1.customer_name="Soumya"
-        c1.customer_gender="Female"
-        c1.customer_email="soumya.koppaka@spit.ac.in"
-        c1.customer_address="Andheri"
-        c1.customer_phone=123456
-        c1.company_name = comp
-        c1.save()
+    # try:
+    #     c1=Customer.objects.get(customer_id=usefuldata["Customer ID"])
+    # except Customer.DoesNotExist:
+    #     c1 = Customer()
+    #     c1.customer_id=usefuldata["Customer ID"]
+    #     c1.customer_name="Soumya"
+    #     c1.customer_gender="Female"
+    #     c1.customer_email="soumya.koppaka@spit.ac.in"
+    #     c1.customer_address="Andheri"
+    #     c1.customer_phone=123456
+    #     c1.company_name = comp
+    #     c1.save()
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
         ip = x_forwarded_for.split(',')[0]
     else:
         ip = request.META.get('REMOTE_ADDR')
-        
+
+    c1 = Customer.objects.get(customer_id=new_id)
+
     r1=ReceiptData()
     r1.customer_id=c1
     r1.invoice_no=usefuldata["Invoice Number"]
