@@ -9,11 +9,7 @@ import re
 import datetime
 
 from .models import ReceiptData, Customer, Items
-def nlp(request,text,comp,name):
-
-
-
-
+def nlp(text,comp,name):
     # FUnction to detect payment method
     def isPaymentMethod(x):
         payment_types_card = ["Card", "mastercard", "visa"]
@@ -245,7 +241,7 @@ def nlp(request,text,comp,name):
 
     list = []
     flag = 0
-    new_id = usefuldatadetect['Customer ID']
+    new_id = usefuldata['Customer ID']
     if new_id == '':
         flag = 1
         list.append('Customer ID')
@@ -305,11 +301,11 @@ def nlp(request,text,comp,name):
     #     c1.customer_phone=123456
     #     c1.company_name = comp
     #     c1.save()
-    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-    if x_forwarded_for:
-        ip = x_forwarded_for.split(',')[0]
-    else:
-        ip = request.META.get('REMOTE_ADDR')
+    ip = "127.0.0.1"
+    #if x_forwarded_for:
+    #    ip = x_forwarded_for.split(',')[0]
+    # else:
+    #     ip = "127.0.0.1"
 
     c1 = Customer.objects.get(customer_id=new_id)
 

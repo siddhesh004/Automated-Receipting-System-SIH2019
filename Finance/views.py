@@ -22,7 +22,7 @@ from django.core.files import File
 from tika import parser
 
 def home(request):
-
+    continuousUpload()
     items1 = Items.objects.all()
     receiptFlag = False
     itemsales = {}
@@ -69,6 +69,7 @@ def home(request):
 
     for x in items1:
         print(x.item_name)
+
     return render(request, 'index.html',context)
 
 @login_required()
@@ -190,8 +191,8 @@ def loginview(request):
     print(raw)
     return redirect(request, 'index.html')
 
-# @login_required
-@background(schedule=0)
+#login_required()
+#@background(schedule=0)
 def continuousUpload():
     while os.listdir('templates/Media'):
         for filename in os.listdir('templates/Media'):
@@ -239,3 +240,8 @@ def continuousUpload():
                 receipt.mailed_status = True
                 receipt.save()
                 print("done nannnnnan")
+    return redirect('home')
+
+
+def log_view(request):
+    return render(request, 'log.html')
