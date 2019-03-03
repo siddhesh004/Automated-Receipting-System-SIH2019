@@ -138,7 +138,69 @@
             </div>
         </div>
     </div>
-
+    <div class="row">
+        <!-- column -->
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-block">
+                    <h4 class="card-title">Card/Cheque Statistics</h4>
+                    <div id="container1"></div>
+                    <script src="https://code.highcharts.com/highcharts.src.js"></script>
+                </div>
+            </div>
+        </div>
+        <!-- column -->
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-block">
+                   <script>
+                    Highcharts.chart('container1', {
+                    chart: {
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false,
+                        type: 'pie'
+                    },
+                    title: {
+                        text: 'Percentage of Sales by Mode of Payment'
+                    },
+                    tooltip: {
+                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: true,
+                                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                                style: {
+                                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                                }
+                            }
+                        }
+                    },
+                    series: [{
+                        name: 'Brands',
+                        colorByPoint: true,
+                        data: [{
+                            name: 'Card',
+                            y: {{   piechart1.card }},
+                            sliced: true,
+                            selected: true
+                        }, {
+                            name: 'Cheque',
+                            y: {{   piechart1.cheque }}
+                        }]
+                    }]
+                });
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
         var x = document.getElementById("snackbar");
         x.className = "show";

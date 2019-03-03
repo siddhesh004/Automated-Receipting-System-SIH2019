@@ -21,9 +21,44 @@ from django.contrib import messages
 def home(request):
 
     items1 = Items.objects.all()
+    curuser=request.user
+    currentcompany=curuser.company_name
+    total_sales=0.0
+    total_item_sales=0.0
+    itemsales={}
+    salesincard=0.0
+    salesincheque=0.0
+    print("Current Company "+str(currentcompany))
+    receipts=ReceiptData.objects.filter(company_name=currentcompany.company_name)
+    for rec in receipts:
+        total_sales=total_sales+float(rec.amount)
+        print("Mode : "+str(rec.mode))
+        if str(rec.mode) == 'cheque':
+            salesincheque=salesincheque+float(rec.amount)
+        else:
+            salesincard=salesincard+float(rec.amount)
+
+    percentcard=salesincard*100/total_sales
+    percentcheque=salesincheque*100/total_sales
+    print(percentcard)
+    print(percentcheque)
+    piechart1={}
+    piechart1['card']=percentcard
+    piechart1['cheque']=percentcheque
+    for it in items1:
+        total_item_sales=total_item_sales+float(it.total)
+        if it.item_name in itemsales.keys():
+            itemsales[it.item_name]=itemsales[it.item_name]+float(it.total)
+        else:
+            itemsales[it.item_name]=float(it.total)
+
+    context={
+        'piechart1':piechart1,
+    }
+
     for x in items1:
         print(x.item_name)
-    return render(request, 'index.html')
+    return render(request, 'index.html',context)
 
 @login_required()
 def uploadView(request):
