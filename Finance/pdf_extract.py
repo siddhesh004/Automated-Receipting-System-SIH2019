@@ -1,4 +1,6 @@
 import PyPDF2
+
+from Finance.models import User
 from Finance.nlp import nlp
 from tika import parser
 from PIL import Image
@@ -89,3 +91,29 @@ def extract_image_zip(name,request):
 
         print(text)
         return nlp(request,text,comp,name)
+
+def extract_file(filename):
+    logger = "siddhesh"
+    comp = User.objects.get(username=logger)
+    comp = comp.company_name.company_name
+    # print ("---------------------------------------"+comp.dtype+"----------------------------------------")
+    raw = parser.from_file("templates\\Media\\" + filename)
+    print(raw['content'])
+    nlp(raw['content'], comp)
+
+def extract_image_file(filename):
+    # file = request.FILES['document']
+    logger = "siddhesh"
+    comp = User.objects.get(username=logger)
+    comp = comp.company_name.company_name
+    finalpath = "templates\\Media\\" + filename
+    image = cv2.imread(finalpath)
+    if image is not None:
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    gray = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 23, 10)
+    gray = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+    filename = "{}.png".format(os.getpid())
+    cv2.imwrite(filename, gray)
+    text = pytesseract.image_to_string(Image.open(filename), lang="eng")
+    print(text)
+    nlp(text, comp)

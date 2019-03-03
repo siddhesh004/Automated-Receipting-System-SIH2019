@@ -16,6 +16,9 @@ import pdfkit, datetime, os
 from zipfile import ZipFile
 from django.core.files.base import ContentFile
 from django.contrib import messages
+from background_task import background
+from Finance import pdf_extract
+
 
 
 def home(request):
@@ -172,3 +175,52 @@ def loginview(request):
         else:
             return render(request, 'registration/login.html', {'error_message': 'Invalid login'})
     return redirect(request, 'index.html')
+
+# @login_required
+@background(schedule=0)
+def continuousUpload():
+    while os.listdir('templates/Media'):
+        for filename in os.listdir('templates/Media'):
+            if filename.endswith(".zip"):
+                with ZipFile(os.path.join('templates/Media', filename), 'r') as zip:
+                    zip.extractall(os.path.join('templates/Media'))
+                os.remove(os.path.join('templates/Media', filename))
+                continue;
+            elif filename.endswith(".jpg"):
+                pdf_extract.extract_image_file(filename)
+            elif filename.endswith(".pdf"):
+                pdf_extract.extract_file(filename)
+            else:
+                print("File" + filename + "skipped because it doesn't confirm to file standards")
+            path_wkthmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
+            config = pdfkit.configuration(wkhtmltopdf=path_wkthmltopdf)
+            now = datetime.datetime.now()
+            receipt_list = ReceiptData.objects.filter(mailed_status=False)
+            for receipt in receipt_list:
+                item = Items.objects.filter(invoice_no=receipt.invoice_no)
+                context = {
+                    'receipt': receipt,
+                    'item': item,
+                    'today': now.strftime("%d-%m-%Y"),
+                }
+                template = get_template('pdf.html')
+                html = template.render(context)
+                options = {
+                    'page-size': 'Letter',
+                    'encoding': "UTF-8",
+                }
+                filen = receipt.invoice_no
+                file_path = os.path.join("pdf\%s.pdf" % filen)
+                pdf = pdfkit.from_string(html, file_path, options, configuration=config)
+                recipients = []
+                for user in Customer.objects.filter(customer_id=receipt.customer_id.customer_id):
+                    recipients.append(user.customer_email)
+
+                email = EmailMessage(subject='Finance Receipt', body='PFA finance receipt',
+                                     from_email=settings.EMAIL_HOST_USER, to=recipients)
+                email.attach_file(file_path)
+                email.send()
+                os.remove(file_path)
+                os.remove(os.path.join('templates/Media', filename))
+                receipt.mailed_status = True
+                receipt.save()

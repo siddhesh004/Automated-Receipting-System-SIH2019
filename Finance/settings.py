@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Finance',
     'wkhtmltopdf',
+    'background_task',
 ]
 
 MIDDLEWARE = [
