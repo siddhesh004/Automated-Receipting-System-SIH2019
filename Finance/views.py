@@ -134,6 +134,7 @@ def uploadView(request):
 
         # error_report = []
         # err_flag = 0
+        log = []
         for receipt in receipt_list:
             item = Items.objects.filter(invoice_no=receipt.invoice_no).filter(status=False)
             context = {
@@ -163,6 +164,11 @@ def uploadView(request):
                 i.status = True
                 i.save()
             receipt.save()
+            log_entry = []
+            log_entry.append(receipt.original_filename)
+            log_entry.append(receipt.invoice_no)
+            log_entry.append(datetime.datetime.now())
+            log.append(log_entry)
         messages.success(request, 'Email(s) sent successfully!')
         return redirect(home)
     form = UploadForm()

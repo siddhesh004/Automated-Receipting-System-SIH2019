@@ -245,7 +245,7 @@ def nlp(request,text,comp,name):
 
     list = []
     flag = 0
-    new_id = usefuldatadetect['Customer ID']
+    new_id = usefuldata['Customer ID']
     if new_id == '':
         flag = 1
         list.append('Customer ID')
