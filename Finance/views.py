@@ -189,3 +189,8 @@ def loginview(request):
         else:
             return render(request, 'registration/login.html', {'error_message': 'Invalid login'})
     return redirect(request, 'index.html')
+
+
+def log_view(request):
+
+    return render(request, 'log.html')
