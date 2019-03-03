@@ -138,7 +138,153 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <!-- column -->
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-block">
+                    <h4 class="card-title">Revenue Statistics</h4>
+                    <div id="container3"></div>
+                    <script src="https://code.highcharts.com/highcharts.src.js"></script>
+                </div>
+            </div>
+        </div>
+        <!-- column -->
+    </div>
+    <!-- Row -->
+    <!-- Row -->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-block">
+                    <script>
+                    Highcharts.chart('container3', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: 'Likelihood of Itemsets'
+    },
+    xAxis: {
+        categories: [
+            'Plastic Chair',
+            'Glass Tables',
+            'Cushion Chair',
+            'King Size Bed',
+            'Floor Length Mirror',
+        ],
+        crosshair: true
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Likelihood Of Being Purchased Together'
+        }
+    },
+    tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                     '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+    },
+    plotOptions: {
+        column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+        }
+    },
+    series: [{
+        name: 'Plastic Chair',
+        data: [0.49, 0.71, 1, 0.29, 0.44, 1, 0.35, 1]
 
+    }, {
+        name: 'Glass Tables',
+        data: [0.83, 0.78, 0.19, 1, 0.60, 0.45, 1, 0.43]
+
+    }, {
+        name: 'Cushion Chair',
+        data: [0.2,0,0,1,0.5,1,0.23,0.5]
+
+    }, {
+        name: 'King Size Bed',
+        data: [0.19, 1, 0.60, 0.45, 0.5,1,0.23,0.5]
+
+    },{
+        name: 'Floor Length Mirror',
+        data: [0.4,1,0.1,0.53,0.67,0,1,0.3]
+
+    }]
+});
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <!-- column -->
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-block">
+                    <h4 class="card-title">Card/Cheque Statistics</h4>
+                    <div id="container1"></div>
+                    <script src="https://code.highcharts.com/highcharts.src.js"></script>
+                </div>
+            </div>
+        </div>
+        <!-- column -->
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-block">
+                   <script>
+                    Highcharts.chart('container1', {
+                    chart: {
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false,
+                        type: 'pie'
+                    },
+                    title: {
+                        text: 'Percentage of Sales by Mode of Payment'
+                    },
+                    tooltip: {
+                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: true,
+                                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                                style: {
+                                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                                }
+                            }
+                        }
+                    },
+                    series: [{
+                        name: 'Brands',
+                        colorByPoint: true,
+                        data: [{
+                            name: 'Card',
+                            y: {{   piechart1.card }},
+                            sliced: true,
+                            selected: true
+                        }, {
+                            name: 'Cheque',
+                            y: {{   piechart1.cheque }}
+                        }]
+                    }]
+                });
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
         var x = document.getElementById("snackbar");
         x.className = "show";

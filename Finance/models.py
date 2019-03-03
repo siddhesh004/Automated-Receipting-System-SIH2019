@@ -37,7 +37,7 @@ class ReceiptData(models.Model):
     amount = models.CharField(max_length=10)
     #commodity = models.CharField(max_length=500, default='')
     Mode = (
-        ('Card', 'cash'),
+        ('Card', 'card'),
         ('Cheque', 'cheque')
     )
     mode = models.CharField(max_length=6, choices=Mode, default='Cheque')
