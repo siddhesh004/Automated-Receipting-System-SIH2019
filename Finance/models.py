@@ -44,9 +44,9 @@ class ReceiptData(models.Model):
     card_no = models.IntegerField(default=0000000000000000)
     cheque_no = models.IntegerField(default=0)
     bank_name = models.CharField(max_length=100, default='',blank=True)
-
+    ip_address = models.CharField(max_length=50, default='')
+    timestamp = models.CharField(max_length=50, default='')
     company_name = models.CharField(max_length=50, blank=True, default='')
-
     original_filename = models.CharField(max_length=50, blank=True, default='')
     mailed_status = models.BooleanField(default=False)
 

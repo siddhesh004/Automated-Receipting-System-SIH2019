@@ -6,6 +6,8 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from tika import parser
 import re
+import datetime
+
 from .models import ReceiptData, Customer, Items
 def nlp(request,text,comp,name):
 
@@ -271,7 +273,12 @@ def nlp(request,text,comp,name):
         c1.customer_phone=123456
         c1.company_name = comp
         c1.save()
-
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+        
     r1=ReceiptData()
     r1.customer_id=c1
     r1.invoice_no=usefuldata["Invoice Number"]
@@ -280,6 +287,8 @@ def nlp(request,text,comp,name):
     r1.mode = usefuldata["Payment method"]
     r1.company_name = comp
     r1.original_filename = name
+    r1.ip_address = ip
+    r1.timestamp = datetime.datetime.now()
     r1.save()
     #i1=Items()
 
@@ -293,6 +302,8 @@ def nlp(request,text,comp,name):
         objs[i].unit_price=usefuldata["Items"][i][2]
         objs[i].total=usefuldata["Items"][i][3]
         objs[i].company_name=comp
+        objs[i].ip_address = ip
+        objs[i].timestamp = datetime.datetime.now()
         objs[i].save()
 
     return {},flag
