@@ -1,3 +1,32 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load staticfiles %}
+
+{% block actual_content %}
+
+    <table>
+        <tr>
+            <th>Filename</th>
+            <th>Invoice Number</th>
+            <th>Timestamp</th>
+            <th>Status</th>
+        </tr>
+        {% for i in log %}
+            <tr>
+                <td>{{ i.original_filename }}</td>
+                {% if i.invoice_no == 0 %}
+                    <td>-</td>
+                {% else %}
+                <td>{{ i.invoice_no }}</td>
+                {% endif %}
+                <td>{{ i.timestamp }}</td>
+                    {% if i.status %}
+                      <td style="color: green">Mailed successfully</td>
+                        {% else %}
+                        <td style="color: red">Fields are missing</td>
+                    {% endif %}
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}

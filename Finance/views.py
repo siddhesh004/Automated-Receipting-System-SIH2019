@@ -9,7 +9,7 @@ from django.views.generic import View
 from django.contrib.auth import authenticate, login
 from Finance import settings
 from Finance.pdf_extract import extract, extract_image, extract_zip, extract_image_zip
-from Finance.models import ReceiptData, Items, Customer, Uploads, Company
+from Finance.models import ReceiptData, Items, Customer, Uploads, Company, Logs
 from Finance.forms import UploadForm
 from Finance.render import Render
 import pdfkit, datetime, os
@@ -114,6 +114,11 @@ def uploadView(request):
                             if test == 1:
                                 myfile.write(str(n) + "," + str(con['report']) + "\n")
                                 messages.error(request, str(n) + " has missing fields: " + str(con['report']))
+                                log = Logs()
+                                log.original_filename = n
+                                log.timestamp = datetime.datetime.now()
+                                log.status = False
+                                log.save()
                                 return redirect(home)
 
             else:
@@ -125,6 +130,11 @@ def uploadView(request):
             if test == 1:
                 myfile.write(str(filename) + "," + str(con['report']) + "\n")
                 messages.error(request, str(filename)+" has missing fields: "+str(con['report']))
+                log = Logs()
+                log.original_filename = filename
+                log.timestamp = datetime.datetime.now()
+                log.status = False
+                log.save()
                 return redirect(home)
 
         path_wkthmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
@@ -134,7 +144,7 @@ def uploadView(request):
 
         # error_report = []
         # err_flag = 0
-        log = []
+        # log = []
         for receipt in receipt_list:
             item = Items.objects.filter(invoice_no=receipt.invoice_no).filter(status=False)
             context = {
@@ -164,11 +174,17 @@ def uploadView(request):
                 i.status = True
                 i.save()
             receipt.save()
-            log_entry = []
-            log_entry.append(receipt.original_filename)
-            log_entry.append(receipt.invoice_no)
-            log_entry.append(datetime.datetime.now())
-            log.append(log_entry)
+            # log_entry = []
+            # log_entry.append(receipt.original_filename)
+            # log_entry.append(receipt.invoice_no)
+            # log_entry.append(datetime.datetime.now())
+            # log.append(log_entry)
+            log = Logs()
+            log.original_filename = receipt.original_filename
+            log.invoice_no = receipt.invoice_no
+            log.timestamp = datetime.datetime.now()
+            log.status = True
+            log.save()
         messages.success(request, 'Email(s) sent successfully!')
         return redirect(home)
     form = UploadForm()
@@ -192,5 +208,5 @@ def loginview(request):
 
 
 def log_view(request):
-
-    return render(request, 'log.html')
+    log = Logs.objects.all()
+    return render(request, 'log.html', {'log': log})
