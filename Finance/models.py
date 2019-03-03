@@ -69,3 +69,8 @@ class Uploads(models.Model):
     uploaded_at = models.DateTimeField(auto_now_add=True)
     company_name = models.CharField(max_length=50, blank=True, default='')
 
+class Logs(models.Model):
+    original_filename = models.CharField(max_length=50, blank=True, default='')
+    invoice_no = models.IntegerField(default=0, unique=True)
+    timestamp = models.CharField(max_length=50, default='')
+    status = models.BooleanField(default=False)
