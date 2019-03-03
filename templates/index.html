@@ -13,6 +13,9 @@
             {% endif %}
         {% endfor %}
     {% endif %}
+
+    {% if user.is_authenticated %}
+
     <div class="row">
         <!-- Column -->
         <div class="col-sm-6">
@@ -80,7 +83,7 @@
                         type: 'pie'
                     },
                     title: {
-                        text: 'Furniture in January, 2018'
+                        text: 'Furniture in January, 2019'
                     },
                     tooltip: {
                         pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -235,6 +238,7 @@
         </div>
         <!-- column -->
     </div>
+    {% if receiptFlag == True %}
     <div class="row">
         <div class="col-sm-12">
             <div class="card">
@@ -285,6 +289,9 @@
             </div>
         </div>
     </div>
+        {% endif %}
+    {% endif %}
+
     <script>
         var x = document.getElementById("snackbar");
         x.className = "show";
