@@ -1,7 +1,7 @@
 import PyPDF2
 
 from Finance.models import User, Company
-from Finance.nlp import nlp
+from Finance.nlpnew import nlp
 from tika import parser
 from PIL import Image
 import pytesseract
@@ -90,7 +90,7 @@ def extract_image_zip(name,request):
         os.remove(filename)
 
         print(text)
-        return nlp(request,text,comp,name)
+        return nlp(text,comp,name)
 
 def extract_file(filename):
     logger = "siddhesh"

@@ -107,7 +107,7 @@ def uploadView(request):
                             if n.endswith('.pdf'):
                                 con, test = extract_zip(n,request)
                             elif n.endswith('.jpg'):
-                                con, test = extract_image_zip(n,request,filename)
+                                con, test = extract_image_zip(n,request)
                             else:
                                 print('File is NOT in correct format')
                                 form = UploadForm()
